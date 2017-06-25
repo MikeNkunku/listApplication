@@ -1,6 +1,8 @@
 package com.nkunku.listApplication;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class to run the application.
@@ -14,7 +16,8 @@ public class ListApplication {
 	 * @throws InvocationTargetException 
 	 * @throws IllegalArgumentException 
 	 * @throws IllegalAccessException */
+	@SuppressWarnings("unchecked")
 	public static void main(final String[] pArgs) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		System.out.format("Time elapsed after call to MyListUtils.union(String, String) : %dms", MethodUtils.getElapsedTime(MyListUtils.class.getMethod("union", String.class, String.class), "1", "2"));
+		System.out.format("Time elapsed after call to MyListUtils.union(String, String) : %dms", MethodUtils.getElapsedTime(MyListUtils.class.getMethod("union", List.class, List.class), Arrays.asList("1"), Arrays.asList("2")));
 	}
 }
