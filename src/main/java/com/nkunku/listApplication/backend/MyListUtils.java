@@ -1,10 +1,12 @@
-package com.nkunku.listApplication;
+package com.nkunku.listApplication.backend;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.nkunku.listApplication.ListApplicationException;
 
 /**
  * Project main class.

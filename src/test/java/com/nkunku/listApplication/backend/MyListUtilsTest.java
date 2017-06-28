@@ -1,4 +1,4 @@
-package com.nkunku.listApplication;
+package com.nkunku.listApplication.backend;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -8,6 +8,9 @@ import java.util.List;
 
 
 import org.junit.Test;
+
+import com.nkunku.listApplication.ListApplicationException;
+import com.nkunku.listApplication.backend.MyListUtils;
 
 /**
  * Unit testing class for {@link MyListUtils}.
