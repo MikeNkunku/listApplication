@@ -5,7 +5,7 @@
 	<artifactId>listApplication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>List Application</name>
-	<description>Project aiming to compare ListUtils class to an user-implemented Utils class.</description>
+	<description>Project aiming to compare ListUtils and CollectionUtils (part which can be used for lists) class to an user-implemented Utils class.</description>
 
 	<!-- Dependencies -->
 	<dependencies>
