@@ -41,24 +41,50 @@ public final class MyListUtils {
 		return output;
 	}
 
-	/** TODO : implement.
+	/**
 	 * @param pList1 The first list.
 	 * @param pList2 The second list.
 	 * @return The intersection of the lists.
 	 * @throws ListApplicationException When at least one of the lists is null.
 	 */
-	public static String intersect(final String pList1, final String pList2) {
-		return null;
+	public static List<String> intersect(final List<String> pList1, final List<String> pList2) {
+		List<String> output = new ArrayList<String>(pList1);
+		for (String elt : pList2) {
+			boolean isMoreThanOnceInL1 = isMoreThanOnceInList(pList1, elt);
+			boolean isMoreThanOnceInL2 = isMoreThanOnceInList(pList2, elt);
+			boolean isMoreThanOnceInOneList = (isMoreThanOnceInL1 && !isMoreThanOnceInL2) || (isMoreThanOnceInL2 && !isMoreThanOnceInL1); 
+			if (!pList1.contains(elt) || isMoreThanOnceInOneList) {
+				output.remove(elt);
+			}
+		}
+		return output;
 	}
 
-	/** TODO : implement.
+	/**
 	 * @param pList1 The first list.
 	 * @param pList2 The second list.
 	 * @return The difference of the lists.
 	 * @throws ListApplicationException When at least one of the lists is null.
 	 */
-	public static String difference(final String pList1, final String pList2) {
-		return null;
+	public static List<String> difference(final List<String> pList1, final List<String> pList2) {
+		List<String> output = new ArrayList<String>(pList1);
+		output.removeAll(pList2);
+		return output;
+	}
+
+	/**
+	 * @param pList1 The first list.
+	 * @param pList2 The second list.
+	 * @return The symmetric difference of the two lists.
+	 */
+	public static List<String> disjunction(final List<String> pList1, final List<String> pList2) {
+		List<String> differenceL1L2 = difference(pList1, pList2);
+		List<String> differenceL2L1 = difference(pList2, pList1);
+		List<String> output = new ArrayList<String>(differenceL1L2);
+		for (String elt : differenceL2L1) {
+			output.remove(elt);
+		}
+		return output;
 	}
 
 	/**
@@ -68,10 +94,20 @@ public final class MyListUtils {
 	 * @throws ListApplicationException When the provided list is invalid (null or empty).
 	 */
 	public static List<String> getListFromString(final String pListStr, final String pDelimiter) throws ListApplicationException {
-		String delimiter = StringUtils.defaultIfEmpty(pDelimiter, DEFAULT_DELIMITER);
 		if (StringUtils.isBlank(pListStr)) {
 			throw new ListApplicationException("The list is invalid");
 		}
+
+		String delimiter = StringUtils.defaultIfEmpty(pDelimiter, DEFAULT_DELIMITER);
 		return Arrays.asList(pListStr.split(delimiter));
+	}
+
+	/**
+	 * @param pList The list.
+	 * @param pElt The element to look for.
+	 * @return Whether the element is present more than once in the list.
+	 */
+	private static boolean isMoreThanOnceInList(final List<String> pList, final String pElt) {
+		return pList.indexOf(pElt) != pList.lastIndexOf(pElt);
 	}
 }
