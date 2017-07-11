@@ -34,7 +34,7 @@ public final class MyListUtils {
 	public static List<String> union(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
 		for (String str : pList2) {
-			if (!output.contains(str) || (pList2.indexOf(str) != pList2.lastIndexOf(str))) {
+			if (!output.contains(str) || isMoreThanOnceInList(pList2, str)) {
 				output.add(str);
 			}
 		}
@@ -47,7 +47,7 @@ public final class MyListUtils {
 	 * @return The intersection of the lists.
 	 * @throws ListApplicationException When at least one of the lists is null.
 	 */
-	public static List<String> intersect(final List<String> pList1, final List<String> pList2) {
+	public static List<String> intersection(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
 		for (String elt : pList2) {
 			boolean isMoreThanOnceInL1 = isMoreThanOnceInList(pList1, elt);
@@ -68,7 +68,9 @@ public final class MyListUtils {
 	 */
 	public static List<String> difference(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
-		output.removeAll(pList2);
+		for (String elt : pList2) {
+			output.remove(elt);
+		}
 		return output;
 	}
 
@@ -81,9 +83,7 @@ public final class MyListUtils {
 		List<String> differenceL1L2 = difference(pList1, pList2);
 		List<String> differenceL2L1 = difference(pList2, pList1);
 		List<String> output = new ArrayList<String>(differenceL1L2);
-		for (String elt : differenceL2L1) {
-			output.remove(elt);
-		}
+		output.addAll(differenceL2L1);
 		return output;
 	}
 
