@@ -35,7 +35,9 @@ public class MyListUtilsTest {
 	}
 
 	@Test
-	public void testUnion() {
-		
+	public void testGetListFromStringValidListWithUserDelimiter() throws ListApplicationException {
+		List<String> list = MyListUtils.getListFromString("1;3;4;4;6", ";");
+		assertThat("The list is supposed to have 5 elements", list, hasSize(5));
+		assertThat("The list should contain the 5 provided elements", list, hasItems("1", "3", "4", "4", "6"));
 	}
 }
