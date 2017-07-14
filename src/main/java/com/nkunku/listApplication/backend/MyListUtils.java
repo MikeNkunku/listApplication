@@ -37,7 +37,7 @@ public final class MyListUtils {
 		String str;
 		while (counter < pList2.size()) {
 			str = pList2.get(counter);
-			if (!output.contains(str) || isMoreThanOnceInList(pList2, counter, str, pList1.contains(str))) {
+			if (!pList1.contains(str) || isMoreThanOnceInList(pList2, counter, str)) {
 				output.add(str);
 			}
 			counter++;
@@ -123,14 +123,9 @@ public final class MyListUtils {
 	 * @param pList The list.
 	 * @param pIndex The current index of the list.
 	 * @param pElt The element to look for.
-	 * @param pPresentInOtherList Whether the element is present in the other list.
 	 * @return Whether the element is present more than once in the list.
 	 */
-	private static boolean isMoreThanOnceInList(final List<String> pList, final int pIndex, final String pElt, final boolean pPresentInOtherList) {
-		if (!pPresentInOtherList && (pList.size() - 1 == pIndex)) {
-			return true;
-		}
-
+	private static boolean isMoreThanOnceInList(final List<String> pList, final int pIndex, final String pElt) {
 		List<String> subList = pList.subList(pIndex, pList.size());
 		return subList.indexOf(pElt) != subList.lastIndexOf(pElt);
 	}
