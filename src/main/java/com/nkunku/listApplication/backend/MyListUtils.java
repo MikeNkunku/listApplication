@@ -33,10 +33,14 @@ public final class MyListUtils {
 	 */
 	public static List<String> union(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
-		for (String str : pList2) {
-			if (!output.contains(str) || isMoreThanOnceInList(pList2, str)) {
+		int counter = 0;
+		String str;
+		while (counter < pList2.size()) {
+			str = pList2.get(counter);
+			if (!output.contains(str) || isMoreThanOnceInList(pList2, counter, str, pList1.contains(str))) {
 				output.add(str);
 			}
+			counter++;
 		}
 		return output;
 	}
@@ -49,13 +53,17 @@ public final class MyListUtils {
 	 */
 	public static List<String> intersection(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
-		for (String elt : pList2) {
+		int i = 0;
+		String elt;
+		while (i < pList2.size()) {
+			elt =  pList2.get(i);
 			boolean isMoreThanOnceInL1 = isMoreThanOnceInList(pList1, elt);
 			boolean isMoreThanOnceInL2 = isMoreThanOnceInList(pList2, elt);
 			boolean isMoreThanOnceInOneList = (isMoreThanOnceInL1 && !isMoreThanOnceInL2) || (isMoreThanOnceInL2 && !isMoreThanOnceInL1); 
 			if (!pList1.contains(elt) || isMoreThanOnceInOneList) {
 				output.remove(elt);
 			}
+			i++;
 		}
 		return output;
 	}
@@ -109,5 +117,21 @@ public final class MyListUtils {
 	 */
 	private static boolean isMoreThanOnceInList(final List<String> pList, final String pElt) {
 		return pList.indexOf(pElt) != pList.lastIndexOf(pElt);
+	}
+
+	/**
+	 * @param pList The list.
+	 * @param pIndex The current index of the list.
+	 * @param pElt The element to look for.
+	 * @param pPresentInOtherList Whether the element is present in the other list.
+	 * @return Whether the element is present more than once in the list.
+	 */
+	private static boolean isMoreThanOnceInList(final List<String> pList, final int pIndex, final String pElt, final boolean pPresentInOtherList) {
+		if (!pPresentInOtherList && (pList.size() - 1 == pIndex)) {
+			return true;
+		}
+
+		List<String> subList = pList.subList(pIndex, pList.size());
+		return subList.indexOf(pElt) != subList.lastIndexOf(pElt);
 	}
 }
