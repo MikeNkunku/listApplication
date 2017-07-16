@@ -52,18 +52,14 @@ public final class MyListUtils {
 	 * @throws ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> intersection(final List<String> pList1, final List<String> pList2) {
-		List<String> output = new ArrayList<String>(pList1);
-		int i = 0;
-		String elt;
-		while (i < pList2.size()) {
-			elt =  pList2.get(i);
-			boolean isMoreThanOnceInL1 = isMoreThanOnceInList(pList1, elt);
-			boolean isMoreThanOnceInL2 = isMoreThanOnceInList(pList2, elt);
-			boolean isMoreThanOnceInOneList = (isMoreThanOnceInL1 && !isMoreThanOnceInL2) || (isMoreThanOnceInL2 && !isMoreThanOnceInL1); 
-			if (!pList1.contains(elt) || isMoreThanOnceInOneList) {
+		boolean firstBiggerThanSecond = pList1.size() > pList2.size();
+		List<String> smallerList = new ArrayList<String>(firstBiggerThanSecond ? pList2 : pList1);
+		List<String> output = new ArrayList<String>(smallerList);
+		List<String> otherList = firstBiggerThanSecond ? pList1 : pList2;
+		for (String elt : smallerList) {
+			if (!otherList.contains(elt)) {
 				output.remove(elt);
 			}
-			i++;
 		}
 		return output;
 	}
@@ -108,15 +104,6 @@ public final class MyListUtils {
 
 		String delimiter = StringUtils.defaultIfEmpty(pDelimiter, DEFAULT_DELIMITER);
 		return Arrays.asList(pListStr.split(delimiter));
-	}
-
-	/**
-	 * @param pList The list.
-	 * @param pElt The element to look for.
-	 * @return Whether the element is present more than once in the list.
-	 */
-	private static boolean isMoreThanOnceInList(final List<String> pList, final String pElt) {
-		return pList.indexOf(pElt) != pList.lastIndexOf(pElt);
 	}
 
 	/**
