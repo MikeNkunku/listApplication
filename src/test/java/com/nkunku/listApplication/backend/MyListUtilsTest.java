@@ -91,15 +91,17 @@ public class MyListUtilsTest {
 	@Test
 	public void testUnionListsWithDuplications() throws ListApplicationException {
 		List<String> unionList = MyListUtils.union(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
-		assertThat("The union of those lists with doublons should contain 9 elements", unionList, hasSize(9));
-		assertThat("The union of those lists with doublons should contain the provided elements", unionList, hasItems("1", "1", "2", "2", "3", "3", "4", "5", "5"));
+		String msgPrefix = "The union of those lists with doublons should contain";
+		assertThat(String.format("%s 9 elements", msgPrefix), unionList, hasSize(9));
+		assertThat(String.format("%s contain the provided elements", msgPrefix), unionList, hasItems("1", "1", "2", "2", "3", "3", "4", "5", "5"));
 	}
 
 	@Test
 	public void testIntersectionWithSameList() throws ListApplicationException {
 		List<String> intersectList = MyListUtils.intersection(LIST_1, LIST_1);
-		assertThat("The intersection of the same list should contain 3 elements", intersectList, hasSize(3));
-		assertThat("The intersection of the same list should contain the provided elements", intersectList, hasItems("1", "2", "3"));
+		String msgPrefix = "The intersection of the same list should contain";
+		assertThat(String.format("%s 3 elements", msgPrefix), intersectList, hasSize(3));
+		assertThat(String.format("%s the provided elements", msgPrefix), intersectList, hasItems("1", "2", "3"));
 	}
 
 	@Test
@@ -111,7 +113,18 @@ public class MyListUtilsTest {
 	@Test
 	public void testIntersectionListsWithDuplications() throws ListApplicationException {
 		List<String> intersectList = MyListUtils.intersection(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
-		assertThat("The intersection of the two lists with duplications should contain only one element", intersectList, hasSize(1));
-		assertThat("The intersection of the two lists with duplications should be \"2\"", intersectList, hasItem("2"));
+		String msgPrefix = "The intersection of the two lists with duplications should";
+		assertThat(String.format("%s contain only one element", msgPrefix), intersectList, hasSize(1));
+		assertThat(String.format("%s be \"2\"", msgPrefix), intersectList, hasItem("2"));
+	}
+
+	@Test
+	public void testIntersectionListsWithCommonDuplications() throws ListApplicationException {
+		List<String> l1 = MyListUtils.getListFromString("1,1,2,3,3,5,5,5", null);
+		List<String> l2 = MyListUtils.getListFromString("1,1,2,2,3,5,5", null);
+		List<String> intersectionList = MyListUtils.intersection(l1, l2);
+		String msgPrefix = "The intersection of the two lists with common duplications should";
+		assertThat(String.format("%s contain 6 elements", msgPrefix), intersectionList, hasSize(6));
+		assertThat(String.format("%s contain the provided elements", msgPrefix), intersectionList, hasItems("1", "1", "2", "3", "5", "5"));
 	}
 }
