@@ -55,11 +55,12 @@ public final class MyListUtils {
 		boolean firstBiggerThanSecond = pList1.size() > pList2.size();
 		List<String> smallerList = new ArrayList<String>(firstBiggerThanSecond ? pList2 : pList1);
 		List<String> output = new ArrayList<String>(smallerList);
-		List<String> otherList = firstBiggerThanSecond ? pList1 : pList2;
+		List<String> otherList = new ArrayList<String>(firstBiggerThanSecond ? pList1 : pList2);
 		for (String elt : smallerList) {
 			if (!otherList.contains(elt)) {
 				output.remove(elt);
 			}
+			otherList.remove(elt);
 		}
 		return output;
 	}
