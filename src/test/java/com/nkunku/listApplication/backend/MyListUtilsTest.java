@@ -13,6 +13,7 @@ import com.nkunku.listApplication.backend.MyListUtils;
 
 /**
  * Unit testing class for {@link MyListUtils}.
+ * 
  * @author Mike.
  */
 public class MyListUtilsTest {
@@ -26,6 +27,12 @@ public class MyListUtilsTest {
 
 	/** Second list. */
 	private static List<String> LIST_2;
+
+	/** First list with common duplications. */
+	private static List<String> LIST_COMMON_DUPLICATIONS_1;
+
+	/** Second list with common duplications. */
+	private static List<String> LIST_COMMON_DUPLICATIONS_2;
 
 	/** First list with duplications. */
 	private static List<String> LIST_DUPLICATIONS_1;
@@ -41,10 +48,13 @@ public class MyListUtilsTest {
 		try {
 			LIST_1 = MyListUtils.getListFromString("1,2,3", null);
 			LIST_2 = MyListUtils.getListFromString("4,5,6", null);
+			LIST_COMMON_DUPLICATIONS_1 = MyListUtils.getListFromString("1,1,2,3,3,5,5,5", null);
+			LIST_COMMON_DUPLICATIONS_2 = MyListUtils.getListFromString("1,1,2,2,3,5,5", null);
 			LIST_DUPLICATIONS_1 = MyListUtils.getListFromString("1,1,2,3,3", null);
 			LIST_DUPLICATIONS_2 = MyListUtils.getListFromString("2,2,4,5,5", null);
 		} catch (ListApplicationException e) {
-			System.out.format("%s unit tests could not be run due to static initialization errors\n", MyListUtilsTest.class.getSimpleName());
+			System.out.format("%s unit tests could not be run due to static initialization errors\n",
+					MyListUtilsTest.class.getSimpleName());
 		}
 	}
 
@@ -85,7 +95,8 @@ public class MyListUtilsTest {
 	public void testUnionDifferentLists() throws ListApplicationException {
 		List<String> unionList = MyListUtils.union(LIST_1, LIST_2);
 		assertThat("The list is supposed to have 6 elements", unionList, hasSize(6));
-		assertThat("The union of those 2 different lists is supposed to contain the provided elements", unionList, hasItems("1", "2", "3", "4", "5", "6"));
+		assertThat("The union of those 2 different lists is supposed to contain the provided elements", unionList,
+				hasItems("1", "2", "3", "4", "5", "6"));
 	}
 
 	@Test
@@ -93,7 +104,8 @@ public class MyListUtilsTest {
 		List<String> unionList = MyListUtils.union(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
 		String msgPrefix = "The union of those lists with doublons should contain";
 		assertThat(String.format("%s 9 elements", msgPrefix), unionList, hasSize(9));
-		assertThat(String.format("%s contain the provided elements", msgPrefix), unionList, hasItems("1", "1", "2", "2", "3", "3", "4", "5", "5"));
+		assertThat(String.format("%s contain the provided elements", msgPrefix), unionList,
+				hasItems("1", "1", "2", "2", "3", "3", "4", "5", "5"));
 	}
 
 	@Test
@@ -120,11 +132,32 @@ public class MyListUtilsTest {
 
 	@Test
 	public void testIntersectionListsWithCommonDuplications() throws ListApplicationException {
-		List<String> l1 = MyListUtils.getListFromString("1,1,2,3,3,5,5,5", null);
-		List<String> l2 = MyListUtils.getListFromString("1,1,2,2,3,5,5", null);
-		List<String> intersectionList = MyListUtils.intersection(l1, l2);
+		List<String> intersectionList = MyListUtils.intersection(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2);
 		String msgPrefix = "The intersection of the two lists with common duplications should";
 		assertThat(String.format("%s contain 6 elements", msgPrefix), intersectionList, hasSize(6));
-		assertThat(String.format("%s contain the provided elements", msgPrefix), intersectionList, hasItems("1", "1", "2", "3", "5", "5"));
+		assertThat(String.format("%s contain the provided elements", msgPrefix), intersectionList,
+				hasItems("1", "1", "2", "3", "5", "5"));
+	}
+
+	@Test
+	public void testDifferenceSameList() throws ListApplicationException {
+		List<String> differenceList = MyListUtils.difference(LIST_1, LIST_1);
+		assertTrue("The difference of the same list should be empty", differenceList.isEmpty());
+	}
+
+	@Test
+	public void testDifferenceDifferentLists() throws ListApplicationException {
+		List<String> differenceList = MyListUtils.difference(LIST_1, LIST_2);
+		String msgPfx = "The difference of those 2 lists should";
+		assertThat(String.format("%s contain 3 elements", msgPfx), differenceList, hasSize(3));
+		assertThat(String.format("%s be equal to the \"LIST_1\"", msgPfx), differenceList, equalTo(LIST_1));
+	}
+ 
+	@Test
+	public void testDifferenceListsWithCommonDuplications() throws ListApplicationException {
+		List<String> differenceList = MyListUtils.difference(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2);
+		String msgPfx = "The difference of the two lists with common duplication should";
+		assertThat(String.format("%s contain %d elements", msgPfx, 2), differenceList, hasSize(2));
+		assertThat(String.format("%s contain the provided elements", msgPfx), differenceList, hasItems("3", "5"));
 	}
 }
