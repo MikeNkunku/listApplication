@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,7 +14,6 @@ import com.nkunku.listApplication.backend.MyListUtils;
 
 /**
  * Unit testing class for {@link MyListUtils}.
- * 
  * @author Mike.
  */
 public class MyListUtilsTest {
@@ -53,8 +53,7 @@ public class MyListUtilsTest {
 			LIST_DUPLICATIONS_1 = MyListUtils.getListFromString("1,1,2,3,3", null);
 			LIST_DUPLICATIONS_2 = MyListUtils.getListFromString("2,2,4,5,5", null);
 		} catch (ListApplicationException e) {
-			System.out.format("%s unit tests could not be run due to static initialization errors\n",
-					MyListUtilsTest.class.getSimpleName());
+			System.out.format("%s unit tests could not be run due to static initialization errors\n", MyListUtilsTest.class.getSimpleName());
 		}
 	}
 
@@ -81,7 +80,8 @@ public class MyListUtilsTest {
 	public void testGetListFromStringValidListWithUserDelimiter() throws ListApplicationException {
 		List<String> list = MyListUtils.getListFromString("1;3;4;4;6", ";");
 		assertThat("The list is supposed to have 5 elements", list, hasSize(5));
-		assertThat("The list should contain the 5 provided elements", list, hasItems("1", "3", "4", "4", "6"));
+		assertThat("The list should contain the 5 provided elements", list, hasItems("1", "3", "6"));
+		assertEquals("The list should contain \"4\" twice", 2, Collections.frequency(list, "4"));
 	}
 
 	@Test
@@ -159,5 +159,37 @@ public class MyListUtilsTest {
 		String msgPfx = "The difference of the two lists with common duplication should";
 		assertThat(String.format("%s contain %d elements", msgPfx, 2), differenceList, hasSize(2));
 		assertThat(String.format("%s contain the provided elements", msgPfx), differenceList, hasItems("3", "5"));
+	}
+
+	@Test
+	public void testDisjunctionWithSameList() throws ListApplicationException {
+		List<String> disjunctionList = MyListUtils.disjunction(LIST_1, LIST_1);
+		assertTrue("The disjunction of the same list should be empty", disjunctionList.isEmpty());
+	}
+
+	@Test
+	public void testDisjunctionWithDifferentLists() throws ListApplicationException {
+		List<String> disjunctionList = MyListUtils.disjunction(LIST_1, LIST_2);
+		String msgPfx = "The disjunction of those 2 different lists should";
+		assertThat(String.format("%s contain %d elements", msgPfx, 6), disjunctionList, hasSize(6));
+		assertThat(String.format("%s contain the provided elements", msgPfx), disjunctionList, hasItems("1", "2", "3", "4", "5", "6"));
+	}
+
+	@Test
+	public void testDisjunctionListsWithDuplications() throws ListApplicationException {
+		List<String> disjunctionList = MyListUtils.disjunction(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
+		assertThat("The disjunction of those two lists with duplications should contain 8 elements", disjunctionList, hasSize(8));
+		assertEquals(String.format("The \"%s\" should occur %d times", "1", 2), 2, Collections.frequency(disjunctionList, "1"));
+		assertEquals(String.format("The \"%s\" should occur %d times", "2", 1), 1, Collections.frequency(disjunctionList, "2"));
+		assertEquals(String.format("The \"%s\" should occur %d times", "3", 2), 2, Collections.frequency(disjunctionList, "3"));
+		assertEquals(String.format("The \"%s\" should occur %d times", "4", 1), 1, Collections.frequency(disjunctionList, "4"));
+		assertEquals(String.format("The \"%s\" should occur %d times", "5", 2), 2, Collections.frequency(disjunctionList, "5"));
+	}
+
+	@Test
+	public void testDisjunctionListsWithCommonDuplications() throws ListApplicationException {
+		List<String> disjunctionList = MyListUtils.disjunction(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2);
+		assertThat("The disjunction should contain 3 elements", disjunctionList, hasSize(3));
+		assertThat("The disjunction should contain the provided elements", disjunctionList, hasItems("2", "3", "5"));
 	}
 }
