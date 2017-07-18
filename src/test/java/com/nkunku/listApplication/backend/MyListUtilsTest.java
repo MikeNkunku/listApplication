@@ -104,8 +104,11 @@ public class MyListUtilsTest {
 		List<String> unionList = MyListUtils.union(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
 		String msgPrefix = "The union of those lists with doublons should contain";
 		assertThat(String.format("%s 9 elements", msgPrefix), unionList, hasSize(9));
-		assertThat(String.format("%s contain the provided elements", msgPrefix), unionList,
-				hasItems("1", "1", "2", "2", "3", "3", "4", "5", "5"));
+		String[] eltsInDouble = new String[] {"1", "2", "3", "5"};
+		for (String elt : eltsInDouble) {
+			assertEquals(String.format("%s \"%s\" twice", msgPrefix, elt), 2, Collections.frequency(unionList, elt));
+		}
+		assertThat(String.format("%s contain the provided elements", msgPrefix), unionList, hasItem("4"));
 	}
 
 	@Test
@@ -133,10 +136,13 @@ public class MyListUtilsTest {
 	@Test
 	public void testIntersectionListsWithCommonDuplications() throws ListApplicationException {
 		List<String> intersectionList = MyListUtils.intersection(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2);
-		String msgPrefix = "The intersection of the two lists with common duplications should";
+		String msgPrefix = "The intersection of the two lists with common duplications should contain";
 		assertThat(String.format("%s contain 6 elements", msgPrefix), intersectionList, hasSize(6));
-		assertThat(String.format("%s contain the provided elements", msgPrefix), intersectionList,
-				hasItems("1", "1", "2", "3", "5", "5"));
+		String[] eltsInDouble = new String[] {"1", "5"};
+		for (String elt : eltsInDouble) {
+			assertEquals(String.format("%s \"%s\" twice", msgPrefix, elt), 2, Collections.frequency(intersectionList, elt));
+		}
+		assertThat(String.format("%s the provided elements", msgPrefix), intersectionList, hasItems("2", "3"));
 	}
 
 	@Test
