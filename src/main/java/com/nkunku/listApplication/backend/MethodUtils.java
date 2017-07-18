@@ -14,7 +14,7 @@ public class MethodUtils {
 	 * @param pMethod The method to invoke.
 	 * @param pNbRuns The number of times that the method must be executed.
 	 * @param pLists The arguments to call the method with.
-	 * @return The mean elapsed time (in <b>milliseconds</b>) for the method with the provided arguments.
+	 * @return The mean elapsed time (in <b>nanoseconds</b>) for the method with the provided arguments.
 	 * @throws IllegalAccessException When the provided method cannot be accessed.
 	 * @throws IllegalArgumentException When the arguments are not of the correct type.
 	 * @throws InvocationTargetException When the method cannot be called on the object.
@@ -25,9 +25,9 @@ public class MethodUtils {
 		long startTime;
 		long sumElapasedTimes = 0;
 		while (runIdx < nbRuns) {
-			startTime = System.currentTimeMillis();
+			startTime = System.nanoTime();
 			pMethod.invoke(null, (Object[]) pLists);
-			sumElapasedTimes += System.currentTimeMillis() - startTime;
+			sumElapasedTimes += System.nanoTime() - startTime;
 			runIdx++;
 		}
 		return sumElapasedTimes / nbRuns;
