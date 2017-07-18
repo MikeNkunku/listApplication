@@ -28,7 +28,7 @@ public class MethodUtils {
 			startTime = System.currentTimeMillis();
 			pMethod.invoke(null, (Object[]) pLists);
 			sumElapasedTimes += System.currentTimeMillis() - startTime;
-			nbRuns++;
+			runIdx++;
 		}
 		return sumElapasedTimes / nbRuns;
 	}
