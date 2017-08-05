@@ -38,6 +38,21 @@ public class ListApplicationFrame extends JFrame {
 	/** The serial version UID. */
 	private static final long serialVersionUID = -2071241925464497755L;
 
+	/** User field : <b>DELIMITER</b>. */
+	public static final String DELIMITER_FIELD = "delimiterField";
+
+	/** User field : <b>NUMBER OF RUNS</b>. */
+	public static final String NB_RUNS_FIELD = "nbRunsField";
+
+	/** User field : <b>FIRST LIST</b>. */
+	public static final String FIRST_LIST_FIELD = "1stListField";
+
+	/** User field : <b>SECOND LIST</b>. */
+	public static final String SECOND_LIST_FIELD = "2ndListField";
+
+	/** User field : <b>LIST OPERATION</b>. */
+	public static final String LIST_OPERATION_FIELD = "listOperationField";
+
 	// --------------------------------------------------------------------------------------------------------------------------------
 	// Fields
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -64,9 +79,9 @@ public class ListApplicationFrame extends JFrame {
 	 * @param pKey The key to find the component later.
 	 * @param pComponent The component to add.
 	 */
-	// TODO : Remove if really not used.
-	private static void addComponent(final String pKey, final JComponent pComponent) {
-		fComponents.put(pKey, pComponent);
+	private static void addComponent(final JComponent pComponent) {
+		fComponents.put(pComponent.getName(), pComponent);
+		fInstance.add(pComponent, fConstraints);
 	}
 
 	/**
@@ -77,8 +92,8 @@ public class ListApplicationFrame extends JFrame {
 		fInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Default operation when the frame is closed.
 		fInstance.setLayout(new GridBagLayout());
 		fInstance.createRootPane();
-//		instance.setPreferredSize(new Dimension(400, 500));
-		JOptionPane.getDesktopPaneForComponent(fInstance);
+		fInstance.setMaximumSize(new Dimension(400, 500));
+//		JOptionPane.getDesktopPaneForComponent(fInstance);
 
 		addLabelPanel();
 		addFieldPanel();
@@ -110,11 +125,9 @@ public class ListApplicationFrame extends JFrame {
 	private static void addLabelPanel() {
 		fConstraints.gridx = fConstraints.gridy = 0;
 		fConstraints.insets = new Insets(5, 10, 5, 10);
-		Dimension framePreferredDim = fInstance.getPreferredSize();
 
 		JLabel delimiterLabel = new JLabel("Delimiter");
 		delimiterLabel.setToolTipText("Delimiter to use for the lists.\nIf none is provided, the default one will be used instead");
-//		delimiterLabel.setPreferredSize(new Dimension((int) (framePreferredDim.width * .35), (int) (framePreferredDim.height * .05)));
 		fInstance.add(delimiterLabel, fConstraints);
 
 		JLabel nbRunsLabel = new JLabel("Nb. runs");
@@ -144,32 +157,36 @@ public class ListApplicationFrame extends JFrame {
 
 		JTextPane delimiterField = new JTextPane();
 		delimiterField.setEditable(true);
-		delimiterField.setName("delimiterField");
+		delimiterField.setName(DELIMITER_FIELD);
 		fConstraints.gridy = 0;
-		fInstance.add(delimiterField, fConstraints);
+		addComponent(delimiterField);
 
 		JTextPane nbRunsField = new JTextPane();
+		nbRunsField.setName(NB_RUNS_FIELD);
 		nbRunsField.setEditable(true);
 		fConstraints.gridy++;
-		fInstance.add(nbRunsField, fConstraints);
+		addComponent(nbRunsField);
 
 		JTextPane firstListField = new JTextPane();
+		firstListField.setName(FIRST_LIST_FIELD);
 		firstListField.setEditable(true);
 		fConstraints.gridy++;
-		fInstance.add(firstListField, fConstraints);
+		addComponent(firstListField);
 
 		JTextPane secondListField = new JTextPane();
+		secondListField.setName(SECOND_LIST_FIELD);
 		secondListField.setEditable(true);
 		fConstraints.gridy++;
-		fInstance.add(secondListField, fConstraints);
+		addComponent(secondListField);
 
 		JList<MyListUtilsOperation> listOperations = new JList<MyListUtilsOperation>(MyListUtilsOperation.values());
 		listOperations.setLayoutOrientation(JList.VERTICAL);
 		listOperations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listOperations.setVisibleRowCount(1);
 		JScrollPane listOperationsScroller = new JScrollPane(listOperations);
+		listOperationsScroller.setName(LIST_OPERATION_FIELD);
 		fConstraints.gridy++;
-		fInstance.add(listOperationsScroller, fConstraints);
+		addComponent(listOperationsScroller);
 
 		delimiterField.requestFocusInWindow();
 	}
@@ -189,7 +206,8 @@ public class ListApplicationFrame extends JFrame {
 		runButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(final ActionEvent pEvt) {
-				((JTextArea) fComponents.get("results")).setText("Clicked on \"run\" !\nYOU SAY I'M JUST A FRIEND...");
+//				((JTextArea) fComponents.get("results")).setText("Clicked on \"run\" !\nYOU SAY I'M JUST A FRIEND...");
+				((JTextArea) fComponents.get("results")).setText(getUserValue("delimiterField"));
 			}
 		});
 		fInstance.add(runButton, fConstraints);
@@ -202,16 +220,14 @@ public class ListApplicationFrame extends JFrame {
 		fConstraints.gridy = 6;
 		fConstraints.gridx = 0;
 		fConstraints.gridwidth = 2;
-//		fConstraints.gridheight = 3;
 		fConstraints.insets =  new Insets(5, 10, 5, 10);
 
-		JTextArea resultsArea = new JTextArea(5, 20);
+		JTextArea resultsArea = new JTextArea(5, 2);
 		resultsArea.setEditable(false);
 		resultsArea.setBackground(Color.DARK_GRAY);
 		resultsArea.setName("results");
 		resultsArea.setForeground(Color.WHITE); // Text color.
-		fInstance.add(resultsArea, fConstraints);
-		addComponent("results", resultsArea);
+		addComponent(resultsArea);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -239,5 +255,13 @@ public class ListApplicationFrame extends JFrame {
 	 */
 	public static final JComponent getComponent(final String pKey) {
 		return fComponents.get(pKey);
+	}
+
+	/**
+	 * @param pFieldName The field name.
+	 * @return The field value.
+	 */
+	public static final String getUserValue(final String pFieldName) {
+		return ((JTextPane) getComponent(pFieldName)).getText();
 	}
 }
