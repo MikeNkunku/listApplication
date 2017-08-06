@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -19,8 +20,9 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
 
 import com.nkunku.listApplication.backend.MyListUtilsOperation;
 import com.nkunku.listApplication.ListApplication;
@@ -53,10 +55,12 @@ public class ListApplicationFrame extends JFrame {
 	/** User field : <b>LIST OPERATION</b>. */
 	public static final String LIST_OPERATION_FIELD = "listOperationField";
 
+	/** Array of user fields. */
+	private static final String[] USER_TEXT_FIELDS = new String[] {DELIMITER_FIELD, NB_RUNS_FIELD, FIRST_LIST_FIELD, SECOND_LIST_FIELD};
+
 	// --------------------------------------------------------------------------------------------------------------------------------
 	// Fields
 	// --------------------------------------------------------------------------------------------------------------------------------
-
 	/** The singleton instance. */
 	private static final ListApplicationFrame fInstance = new ListApplicationFrame();
 
@@ -93,7 +97,6 @@ public class ListApplicationFrame extends JFrame {
 		fInstance.setLayout(new GridBagLayout());
 		fInstance.createRootPane();
 		fInstance.setMaximumSize(new Dimension(400, 500));
-//		JOptionPane.getDesktopPaneForComponent(fInstance);
 
 		addLabelPanel();
 		addFieldPanel();
@@ -101,6 +104,8 @@ public class ListApplicationFrame extends JFrame {
 		addResultsPanel();
 
 		fInstance.pack(); // Sizes the frame so that all its contents are displayed at their preferred size or above.
+
+		// Set the bounds.
 
 		// Centers the frame.
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -155,27 +160,32 @@ public class ListApplicationFrame extends JFrame {
 		fConstraints.gridx = 1;
 		fConstraints.insets = new Insets(5, 10, 5, 10);
 
-		JTextPane delimiterField = new JTextPane();
+		Border border = BorderFactory.createEmptyBorder(0, 5, 0, 10);
+		JTextField delimiterField = new JTextField();
 		delimiterField.setEditable(true);
 		delimiterField.setName(DELIMITER_FIELD);
+		delimiterField.setBorder(border);
 		fConstraints.gridy = 0;
 		addComponent(delimiterField);
 
-		JTextPane nbRunsField = new JTextPane();
+		JTextField nbRunsField = new JTextField();
 		nbRunsField.setName(NB_RUNS_FIELD);
 		nbRunsField.setEditable(true);
+		nbRunsField.setBorder(border);
 		fConstraints.gridy++;
 		addComponent(nbRunsField);
 
-		JTextPane firstListField = new JTextPane();
+		JTextField firstListField = new JTextField();
 		firstListField.setName(FIRST_LIST_FIELD);
 		firstListField.setEditable(true);
+		firstListField.setBorder(border);
 		fConstraints.gridy++;
 		addComponent(firstListField);
 
-		JTextPane secondListField = new JTextPane();
+		JTextField secondListField = new JTextField();
 		secondListField.setName(SECOND_LIST_FIELD);
 		secondListField.setEditable(true);
+		secondListField.setBorder(border);
 		fConstraints.gridy++;
 		addComponent(secondListField);
 
@@ -201,16 +211,16 @@ public class ListApplicationFrame extends JFrame {
 		fConstraints.insets = new Insets(5, 10, 5, 10);
 
 		JButton runButton = new JButton("Run");
+		runButton.setName("runButton");
 		runButton.setEnabled(true);
 		runButton.setToolTipText("Run the picked list operation for the provided list.");
 		runButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(final ActionEvent pEvt) {
-//				((JTextArea) fComponents.get("results")).setText("Clicked on \"run\" !\nYOU SAY I'M JUST A FRIEND...");
-				((JTextArea) fComponents.get("results")).setText(getUserValue("delimiterField"));
+				((JTextArea) fComponents.get("results")).setText(getUserValue(DELIMITER_FIELD));
 			}
 		});
-		fInstance.add(runButton, fConstraints);
+		addComponent(runButton);
 	}
 
 	/**
@@ -235,25 +245,11 @@ public class ListApplicationFrame extends JFrame {
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * @return The instance.
-	 */
-	public static final ListApplicationFrame getInstance() {
-		return fInstance;
-	}
-
-	/**
-	 * @return The constraints.
-	 */
-	public static final GridBagConstraints getConstraints() {
-		return fConstraints;
-	}
-
-	/**
 	 * @param pKey The component key.
 	 * @return The component if found.<br/>
 	 * <code>null</code> otherwise.
 	 */
-	public static final JComponent getComponent(final String pKey) {
+	private static final JComponent getComponent(final String pKey) {
 		return fComponents.get(pKey);
 	}
 
@@ -261,7 +257,14 @@ public class ListApplicationFrame extends JFrame {
 	 * @param pFieldName The field name.
 	 * @return The field value.
 	 */
-	public static final String getUserValue(final String pFieldName) {
-		return ((JTextPane) getComponent(pFieldName)).getText();
+	private static final String getUserValue(final String pFieldName) {
+		return ((JTextField) getComponent(pFieldName)).getText();
+	}
+
+	/**
+	 * @return The array of user fields.
+	 */
+	public static String[] getUserTextFields() {
+		return USER_TEXT_FIELDS;
 	}
 }
