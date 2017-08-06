@@ -8,7 +8,9 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -21,11 +23,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.nkunku.listApplication.backend.MyListUtils;
 import com.nkunku.listApplication.backend.MyListUtilsOperation;
 import com.nkunku.listApplication.ListApplication;
+import com.nkunku.listApplication.ListApplicationException;
 
 /**
  * The main frame for the application.
@@ -56,7 +64,7 @@ public class ListApplicationFrame extends JFrame {
 	public static final String LIST_OPERATION_FIELD = "listOperationField";
 
 	/** Array of user fields. */
-	private static final String[] USER_TEXT_FIELDS = new String[] {DELIMITER_FIELD, NB_RUNS_FIELD, FIRST_LIST_FIELD, SECOND_LIST_FIELD};
+	protected static final String[] USER_TEXT_FIELDS = new String[] {DELIMITER_FIELD, NB_RUNS_FIELD, FIRST_LIST_FIELD, SECOND_LIST_FIELD};
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 	// Fields
@@ -132,7 +140,7 @@ public class ListApplicationFrame extends JFrame {
 		fConstraints.insets = new Insets(5, 10, 5, 10);
 
 		JLabel delimiterLabel = new JLabel("Delimiter");
-		delimiterLabel.setToolTipText("Delimiter to use for the lists.\nIf none is provided, the default one will be used instead");
+		delimiterLabel.setToolTipText("Delimiter to use for the lists.\nIf none is provided, the default one will be used instead.");
 		fInstance.add(delimiterLabel, fConstraints);
 
 		JLabel nbRunsLabel = new JLabel("Nb. runs");
@@ -192,11 +200,12 @@ public class ListApplicationFrame extends JFrame {
 		JList<MyListUtilsOperation> listOperations = new JList<MyListUtilsOperation>(MyListUtilsOperation.values());
 		listOperations.setLayoutOrientation(JList.VERTICAL);
 		listOperations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listOperations.setVisibleRowCount(1);
+		listOperations.setVisibleRowCount(2);
+		listOperations.setName(LIST_OPERATION_FIELD);
 		JScrollPane listOperationsScroller = new JScrollPane(listOperations);
-		listOperationsScroller.setName(LIST_OPERATION_FIELD);
 		fConstraints.gridy++;
-		addComponent(listOperationsScroller);
+		fComponents.put(LIST_OPERATION_FIELD, listOperations);
+		fInstance.add(listOperationsScroller, fConstraints);
 
 		delimiterField.requestFocusInWindow();
 	}
@@ -215,9 +224,9 @@ public class ListApplicationFrame extends JFrame {
 		runButton.setEnabled(true);
 		runButton.setToolTipText("Run the picked list operation for the provided list.");
 		runButton.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(final ActionEvent pEvt) {
-				((JTextArea) fComponents.get("results")).setText(getUserValue(DELIMITER_FIELD));
+				executeListOperation();
 			}
 		});
 		addComponent(runButton);
@@ -256,15 +265,62 @@ public class ListApplicationFrame extends JFrame {
 	/**
 	 * @param pFieldName The field name.
 	 * @return The field value.
+	 * @throws ListApplicationException When the field does not exist.
 	 */
-	private static final String getUserValue(final String pFieldName) {
-		return ((JTextField) getComponent(pFieldName)).getText();
+	@SuppressWarnings("unchecked")
+	private static final String getUserValue(final String pFieldName) throws ListApplicationException {
+		if (ArrayUtils.contains(USER_TEXT_FIELDS, pFieldName)) {
+			return ((JTextField) getComponent(pFieldName)).getText();
+		} else if (LIST_OPERATION_FIELD.equals(pFieldName)) {
+			return ((JList<MyListUtilsOperation>) getComponent(LIST_OPERATION_FIELD)).getSelectedValue().name();
+		}
+		throw new ListApplicationException("This field does not exist.");
 	}
 
 	/**
-	 * @return The array of user fields.
+	 * @return The number of times to run the list operation.
+	 * @throws ListApplicationException When an error occurs while parsing the value.
 	 */
-	public static String[] getUserTextFields() {
-		return USER_TEXT_FIELDS;
+	private static long getNbRuns() throws ListApplicationException {
+		long nbRuns;
+		try {
+			nbRuns = Integer.valueOf(getUserValue(NB_RUNS_FIELD));
+		} catch (NumberFormatException e) {
+			throw new ListApplicationException("The number of runs is invalid.");
+		}
+		return nbRuns;
+	}
+
+	/**
+	 * Runs the list operation.
+	 */
+	private static void executeListOperation() {
+		try {
+			long myListUtilsMeanRunTime = 0;
+			long collectionUtilsMeanRunTime = 0;
+			long nbRuns = getNbRuns();
+			String delimiter = getUserValue(DELIMITER_FIELD);
+			List<String> list1 = MyListUtils.getListFromString(getUserValue(FIRST_LIST_FIELD), delimiter);
+			List<String> list2 = MyListUtils.getListFromString(getUserValue(SECOND_LIST_FIELD), delimiter);
+			String listOperation = getUserValue(LIST_OPERATION_FIELD);
+			StringBuilder sb =  new StringBuilder("Delimiter : \"%s\"")
+					.append("\nNb. runs : %d")
+					.append("\nList #1 : \"%s\"")
+					.append("\nList #2 : \"%s\"")
+					.append("\nList operation : \"%s\"");
+			String msg = String.format(sb.toString(), StringUtils.defaultIfBlank(delimiter, MyListUtils.DEFAULT_DELIMITER),
+					Long.valueOf(nbRuns), list1, list2, listOperation);
+			setResults(msg);
+		} catch (ListApplicationException e) {
+			displayDialog(e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Set the results to display.
+	 * @param pString The message to display.
+	 */
+	private static void setResults(final String pString) {
+		((JTextArea) getComponent("results")).setText(pString);
 	}
 }
