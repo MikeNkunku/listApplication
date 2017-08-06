@@ -19,7 +19,7 @@ public final class MyListUtils {
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 	/** Default delimiter. */
-	private static final String DEFAULT_DELIMITER = ",";
+	public static final String DEFAULT_DELIMITER = ",";
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 	// Methods
