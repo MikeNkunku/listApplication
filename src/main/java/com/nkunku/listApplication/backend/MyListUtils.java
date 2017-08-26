@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.nkunku.listApplication.ListApplicationException;
@@ -100,7 +102,7 @@ public final class MyListUtils {
 	 */
 	public static List<String> getListFromString(final String pListStr, final String pDelimiter) throws ListApplicationException {
 		if (StringUtils.isBlank(pListStr)) {
-			throw new ListApplicationException("The list is invalid");
+			throw new ListApplicationException(String.format("The list \"%s\" is invalid.", pListStr), JOptionPane.ERROR_MESSAGE);
 		}
 
 		String delimiter = StringUtils.defaultIfEmpty(pDelimiter, DEFAULT_DELIMITER);
