@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
@@ -274,7 +273,7 @@ public class ListApplicationFrame extends JFrame {
 		} else if (LIST_OPERATION_FIELD.equals(pFieldName)) {
 			return ((JList<MyListUtilsOperation>) getComponent(LIST_OPERATION_FIELD)).getSelectedValue().name();
 		}
-		throw new ListApplicationException("This field does not exist.");
+		throw new ListApplicationException("This field does not exist.", JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -286,7 +285,7 @@ public class ListApplicationFrame extends JFrame {
 		try {
 			nbRuns = Integer.valueOf(getUserValue(NB_RUNS_FIELD));
 		} catch (NumberFormatException e) {
-			throw new ListApplicationException("The number of runs is invalid.");
+			throw new ListApplicationException("The number of runs is invalid.", JOptionPane.ERROR_MESSAGE);
 		}
 		return nbRuns;
 	}
@@ -312,7 +311,7 @@ public class ListApplicationFrame extends JFrame {
 					Long.valueOf(nbRuns), list1, list2, listOperation);
 			setResults(msg);
 		} catch (ListApplicationException e) {
-			displayDialog(e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			displayDialog(e.getMessage(), "Error", e.getLevel());
 		}
 	}
 
