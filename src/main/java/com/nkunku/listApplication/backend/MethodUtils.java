@@ -19,7 +19,7 @@ public class MethodUtils {
 	 * @throws IllegalArgumentException When the arguments are not of the correct type.
 	 * @throws InvocationTargetException When the method cannot be called on the object.
 	 */
-	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final List<String>... pLists) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, @SuppressWarnings("unchecked") final List<String>... pLists) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int nbRuns = pNbRuns < 2 ? 1 : pNbRuns;
 		int runIdx = 0;
 		long startTime;
@@ -31,5 +31,13 @@ public class MethodUtils {
 			runIdx++;
 		}
 		return sumElapasedTimes / nbRuns;
+	}
+
+	/**
+	 * @param pTimeInNanoSeconds The time in <b>nanoseconds</b>.
+	 * @return The time in <b>milliseconds</b>.
+	 */
+	public static long getMillisecondsFromNanoseconds(final long pTimeInNanoSeconds) {
+		return (long) Math.round((pTimeInNanoSeconds / Math.pow(10, 6)));
 	}
 }
