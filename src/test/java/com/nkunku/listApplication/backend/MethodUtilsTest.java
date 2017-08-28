@@ -1,5 +1,6 @@
 package com.nkunku.listApplication.backend;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,6 +27,14 @@ public class MethodUtilsTest {
 	@Test
 	public void testGetMeanElaspedTimeTenTimes() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		testGetMeanElapsedTime(10);
+	}
+
+	@Test
+	public void testGetMillisecondsFromNanoseconds() {
+		assertEquals("The result should be 1ms", 1, MethodUtils.getMillisecondsFromNanoseconds(900_000L));
+		assertEquals("The result should be 1ms", 1, MethodUtils.getMillisecondsFromNanoseconds(1_130_300L));
+		assertEquals("The result should be 1ms", 1, MethodUtils.getMillisecondsFromNanoseconds(1_499_999L));
+		assertEquals("The result should be 2ms", 2, MethodUtils.getMillisecondsFromNanoseconds(1_500_000L));
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
