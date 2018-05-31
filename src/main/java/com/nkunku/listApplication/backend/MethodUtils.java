@@ -8,7 +8,7 @@ import java.util.List;
  * Class containing methods which are likely to be used by other classes.
  * @author Mike.
  */
-public class MethodUtils {
+public final class MethodUtils {
 
 	/**
 	 * @param pMethod The method to invoke.
@@ -19,7 +19,9 @@ public class MethodUtils {
 	 * @throws IllegalArgumentException When the arguments are not of the correct type.
 	 * @throws InvocationTargetException When the method cannot be called on the object.
 	 */
-	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, @SuppressWarnings("unchecked") final List<String>... pLists) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	// FIXME: This method must only take 2 lists instead of an array of lists
+	@SafeVarargs
+	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final List<String>... pLists) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int nbRuns = pNbRuns < 2 ? 1 : pNbRuns;
 		int runIdx = 0;
 		long startTime;
@@ -38,6 +40,6 @@ public class MethodUtils {
 	 * @return The time in <b>milliseconds</b>.
 	 */
 	public static long getMillisecondsFromNanoseconds(final long pTimeInNanoSeconds) {
-		return (long) Math.round((pTimeInNanoSeconds / Math.pow(10, 6)));
+		return Math.round((pTimeInNanoSeconds / Math.pow(10, 6)));
 	}
 }
