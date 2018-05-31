@@ -1,13 +1,12 @@
 package com.nkunku.listApplication.backend;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+
 
 /**
  * Unit testing class for {@link MethodUtils}.
@@ -15,36 +14,32 @@ import org.junit.Test;
  */
 public class MethodUtilsTest {
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Tests
-	// --------------------------------------------------------------------------------------------------------------------------------
-
 	@Test
-	public void testGetMeanElaspedTimeOnce() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void testGetMeanElaspedTimeOnce() throws Exception {
 		testGetMeanElapsedTime(-1);
 	}
 
 	@Test
-	public void testGetMeanElaspedTimeTenTimes() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void testGetMeanElaspedTimeTenTimes() throws Exception {
 		testGetMeanElapsedTime(10);
 	}
 
 	@Test
 	public void testGetMillisecondsFromNanoseconds() {
-		assertEquals("The result should be 1ms", 1, MethodUtils.getMillisecondsFromNanoseconds(900_000L));
-		assertEquals("The result should be 1ms", 1, MethodUtils.getMillisecondsFromNanoseconds(1_130_300L));
-		assertEquals("The result should be 1ms", 1, MethodUtils.getMillisecondsFromNanoseconds(1_499_999L));
-		assertEquals("The result should be 2ms", 2, MethodUtils.getMillisecondsFromNanoseconds(1_500_000L));
+		assertThat(MethodUtils.getMillisecondsFromNanoseconds(900_000L)).isEqualTo(1);
+		assertThat(MethodUtils.getMillisecondsFromNanoseconds(1_130_300L)).isEqualTo(1);
+		assertThat(MethodUtils.getMillisecondsFromNanoseconds(1_499_999L)).isEqualTo(1);
+		assertThat(MethodUtils.getMillisecondsFromNanoseconds(1_500_000L)).isEqualTo(2);
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Factorized methods to test
-	// --------------------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
-	private void testGetMeanElapsedTime(final int pNbRuns) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	/**
+	 * @param   pNbRuns     The number of times to run the {@linkplain MyListUtils#union union} method.
+	 * @throws  Exception   When the union method didn't get the right parameters or an error occurred while computing the mean elapsed time.
+	 */
+	private void testGetMeanElapsedTime(final int pNbRuns) throws Exception {
 		long meanElapsedTime = MethodUtils.getMeanElapsedTime(MyListUtils.class.getMethod("union", List.class, List.class), pNbRuns, Arrays.asList("1", "2"),
 				Arrays.asList("1", "2"));
-		assertTrue("The mean of the elapsed time should be valid", meanElapsedTime > 0);
+		assertThat(meanElapsedTime).isGreaterThan(0);
 	}
 }
