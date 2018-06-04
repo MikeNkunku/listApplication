@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.nkunku.listApplication</groupId>
 	<artifactId>listApplication</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>List Application</name>
 	<description>Project aiming to compare ListUtils and CollectionUtils (part which can be used for lists) class to an user-implemented Utils class.</description>
 
