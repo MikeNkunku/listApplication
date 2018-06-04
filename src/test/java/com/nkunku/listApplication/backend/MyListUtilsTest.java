@@ -1,12 +1,11 @@
 package com.nkunku.listApplication.backend;
 
+import static org.assertj.core.api.Assertions.*;
 import com.nkunku.listApplication.ListApplicationException;
 import org.assertj.core.api.Condition;
 import org.junit.Test;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit testing class for {@link MyListUtils}.
