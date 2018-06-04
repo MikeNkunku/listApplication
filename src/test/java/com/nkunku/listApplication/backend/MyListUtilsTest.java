@@ -14,6 +14,7 @@ import java.util.List;
 public class MyListUtilsTest {
 
 	/** First list. */
+	@SuppressWarnings("CanBeFinal")
 	private static List<String> LIST_1;
 
 	/** Second list. */

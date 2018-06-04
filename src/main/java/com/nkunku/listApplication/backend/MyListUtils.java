@@ -24,10 +24,9 @@ public final class MyListUtils {
 	 * @param   pList1 The first list.
 	 * @param   pList2 The second list.
 	 * @return  The union of the lists.
-	 * @throws  ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> union(final List<String> pList1, final List<String> pList2) {
-		List<String> output = new ArrayList<String>(pList1);
+		List<String> output = new ArrayList<>(pList1);
 		int counter = 0;
 		String str;
 		while (counter < pList2.size()) {
@@ -44,13 +43,12 @@ public final class MyListUtils {
 	 * @param   pList1 The first list.
 	 * @param   pList2 The second list.
 	 * @return  The intersection of the lists.
-	 * @throws  ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> intersection(final List<String> pList1, final List<String> pList2) {
 		boolean firstBiggerThanSecond = pList1.size() > pList2.size();
-		List<String> smallerList = new ArrayList<String>(firstBiggerThanSecond ? pList2 : pList1);
-		List<String> output = new ArrayList<String>(smallerList);
-		List<String> otherList = new ArrayList<String>(firstBiggerThanSecond ? pList1 : pList2);
+		List<String> smallerList = new ArrayList<>(firstBiggerThanSecond ? pList2 : pList1);
+		List<String> output = new ArrayList<>(smallerList);
+		List<String> otherList = new ArrayList<>(firstBiggerThanSecond ? pList1 : pList2);
 		for (String elt : smallerList) {
 			if (!otherList.contains(elt)) {
 				output.remove(elt);
@@ -64,10 +62,9 @@ public final class MyListUtils {
 	 * @param   pList1 The first list.
 	 * @param   pList2 The second list.
 	 * @return  The difference of the lists.
-	 * @throws  ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> difference(final List<String> pList1, final List<String> pList2) {
-		List<String> output = new ArrayList<String>(pList1);
+		List<String> output = new ArrayList<>(pList1);
 		for (String elt : pList2) {
 			output.remove(elt);
 		}
@@ -82,7 +79,7 @@ public final class MyListUtils {
 	public static List<String> disjunction(final List<String> pList1, final List<String> pList2) {
 		List<String> differenceL1L2 = difference(pList1, pList2);
 		List<String> differenceL2L1 = difference(pList2, pList1);
-		List<String> output = new ArrayList<String>(differenceL1L2);
+		List<String> output = new ArrayList<>(differenceL1L2);
 		output.addAll(differenceL2L1);
 		return output;
 	}

@@ -16,5 +16,5 @@ public enum MyListUtilsOperation {
 	INTERSECTION,
 
 	/** Disjunction operation. */
-	DISJUNCTION;
+	DISJUNCTION
 }
