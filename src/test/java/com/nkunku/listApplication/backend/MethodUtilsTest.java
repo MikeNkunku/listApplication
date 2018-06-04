@@ -15,12 +15,12 @@ import org.junit.Test;
 public class MethodUtilsTest {
 
 	@Test
-	public void testGetMeanElaspedTimeOnce() throws Exception {
+	public void testGetMeanElapsedTimeOnce() throws Exception {
 		testGetMeanElapsedTime(-1);
 	}
 
 	@Test
-	public void testGetMeanElaspedTimeTenTimes() throws Exception {
+	public void testGetMeanElapsedTimeTenTimes() throws Exception {
 		testGetMeanElapsedTime(10);
 	}
 

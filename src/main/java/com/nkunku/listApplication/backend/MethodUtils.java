@@ -25,14 +25,14 @@ public final class MethodUtils {
 		int nbRuns = pNbRuns < 2 ? 1 : pNbRuns;
 		int runIdx = 0;
 		long startTime;
-		long sumElapasedTimes = 0;
+		long sumElapsedTimes = 0;
 		while (runIdx < nbRuns) {
 			startTime = System.nanoTime();
 			pMethod.invoke(null, (Object[]) pLists);
-			sumElapasedTimes += System.nanoTime() - startTime;
+			sumElapsedTimes += System.nanoTime() - startTime;
 			runIdx++;
 		}
-		return sumElapasedTimes / nbRuns;
+		return sumElapsedTimes / nbRuns;
 	}
 
 	/**
