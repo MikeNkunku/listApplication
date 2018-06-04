@@ -16,22 +16,15 @@ import com.nkunku.listApplication.ListApplicationException;
  */
 public final class MyListUtils {
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Constants
-	// --------------------------------------------------------------------------------------------------------------------------------
-
 	/** Default delimiter. */
 	public static final String DEFAULT_DELIMITER = ",";
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Methods
-	// --------------------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * @param pList1 The first list.
-	 * @param pList2 The second list.
-	 * @return The union of the lists.
-	 * @throws ListApplicationException When at least one of the lists is null.
+	 * @param   pList1 The first list.
+	 * @param   pList2 The second list.
+	 * @return  The union of the lists.
+	 * @throws  ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> union(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
@@ -48,10 +41,10 @@ public final class MyListUtils {
 	}
 
 	/**
-	 * @param pList1 The first list.
-	 * @param pList2 The second list.
-	 * @return The intersection of the lists.
-	 * @throws ListApplicationException When at least one of the lists is null.
+	 * @param   pList1 The first list.
+	 * @param   pList2 The second list.
+	 * @return  The intersection of the lists.
+	 * @throws  ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> intersection(final List<String> pList1, final List<String> pList2) {
 		boolean firstBiggerThanSecond = pList1.size() > pList2.size();
@@ -68,10 +61,10 @@ public final class MyListUtils {
 	}
 
 	/**
-	 * @param pList1 The first list.
-	 * @param pList2 The second list.
-	 * @return The difference of the lists.
-	 * @throws ListApplicationException When at least one of the lists is null.
+	 * @param   pList1 The first list.
+	 * @param   pList2 The second list.
+	 * @return  The difference of the lists.
+	 * @throws  ListApplicationException When at least one of the lists is null.
 	 */
 	public static List<String> difference(final List<String> pList1, final List<String> pList2) {
 		List<String> output = new ArrayList<String>(pList1);
@@ -82,9 +75,9 @@ public final class MyListUtils {
 	}
 
 	/**
-	 * @param pList1 The first list.
-	 * @param pList2 The second list.
-	 * @return The symmetric difference of the two lists.
+	 * @param   pList1 The first list.
+	 * @param   pList2 The second list.
+	 * @return  The symmetric difference of the two lists.
 	 */
 	public static List<String> disjunction(final List<String> pList1, final List<String> pList2) {
 		List<String> differenceL1L2 = difference(pList1, pList2);
@@ -95,10 +88,10 @@ public final class MyListUtils {
 	}
 
 	/**
-	 * @param pListStr The list as a String.
-	 * @param pDelimiter The delimiter in the provided String.
-	 * @return The corresponding list of String.
-	 * @throws ListApplicationException When the provided list is invalid (null or empty).
+	 * @param   pListStr    The list as a String.
+	 * @param   pDelimiter  The delimiter in the provided String.
+	 * @return  The corresponding list of String.
+	 * @throws  ListApplicationException When the provided list is invalid (null or empty).
 	 */
 	public static List<String> getListFromString(final String pListStr, final String pDelimiter) throws ListApplicationException {
 		if (StringUtils.isBlank(pListStr)) {
@@ -110,10 +103,10 @@ public final class MyListUtils {
 	}
 
 	/**
-	 * @param pList The list.
-	 * @param pIndex The current index of the list.
-	 * @param pElt The element to look for.
-	 * @return Whether the element is present more than once in the list.
+	 * @param   pList   The list.
+	 * @param   pIndex  The current index of the list.
+	 * @param   pElt    The element to look for.
+	 * @return  Whether the element is present more than once in the list.
 	 */
 	private static boolean isMoreThanOnceInList(final List<String> pList, final int pIndex, final String pElt) {
 		List<String> subList = pList.subList(pIndex, pList.size());
