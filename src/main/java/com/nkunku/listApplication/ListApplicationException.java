@@ -14,8 +14,8 @@ public class ListApplicationException extends Exception {
 
 	/**
 	 * Constructor with error message.
-	 * @param pMessage The error message.
-	 * @param pLevel The error level.
+	 * @param pMessage  The error message.
+	 * @param pLevel    The error level.
 	 */
 	public ListApplicationException(final String pMessage, final int pLevel) {
 		super(pMessage);
