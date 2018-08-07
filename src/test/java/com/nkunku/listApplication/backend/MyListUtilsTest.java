@@ -48,7 +48,7 @@ public class MyListUtilsTest {
 
 
 	@Test
-	public void testGetListFromStringNullListString() {
+	public void getListFromStringNullListString() {
 		try {
 			MyListUtils.getListFromString(null, null);
 		} catch (ListApplicationException e) {
@@ -57,14 +57,14 @@ public class MyListUtilsTest {
 	}
 
 	@Test
-	public void testGetListFromStringValidListStringWithDfltDelimiter() {
+	public void getListFromStringValidListStringWithDfltDelimiter() {
 		assertThat(LIST_1)
 			.hasSize(3)
 			.contains("1", "2", "3");
 	}
 
 	@Test
-	public void testGetListFromStringValidListWithUserDelimiter() throws ListApplicationException {
+	public void getListFromStringValidListWithUserDelimiter() throws ListApplicationException {
 		assertThat(MyListUtils.getListFromString("1;3;4;4;6", ";"))
 			.hasSize(5)
 			.containsOnlyOnce("1", "3", "6")
@@ -72,21 +72,21 @@ public class MyListUtilsTest {
 	}
 
 	@Test
-	public void testUnionSameList() {
+	public void unionWithSameList() {
 		assertThat(MyListUtils.union(LIST_1, LIST_1))
 			.hasSize(3)
 			.contains("1", "2", "3");
 	}
 
 	@Test
-	public void testUnionDifferentLists() {
+	public void unionWithDifferentLists() {
 		assertThat(MyListUtils.union(LIST_1, LIST_2))
 			.hasSize(6)
 			.containsOnlyOnce("1", "2", "3", "4", "5", "6");
 	}
 
 	@Test
-	public void testUnionListsWithDuplications() {
+	public void unionListsWithDuplications() {
 		List<String> unionList = MyListUtils.union(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
 		assertThat(unionList)
 			.hasSize(9)
@@ -99,26 +99,26 @@ public class MyListUtilsTest {
 	}
 
 	@Test
-	public void testIntersectionWithSameList() {
+	public void intersectionWithSameList() {
 		assertThat(MyListUtils.intersection(LIST_1, LIST_1))
 			.hasSize(3)
 			.contains("1", "2", "3");
 	}
 
 	@Test
-	public void testIntersectionDifferentLists() {
+	public void intersectionWithDifferentLists() {
 		assertThat(MyListUtils.intersection(LIST_1, LIST_2)).isEmpty();
 	}
 
 	@Test
-	public void testIntersectionListsWithDuplications() {
+	public void intersectionListsWithDuplications() {
 		assertThat(MyListUtils.intersection(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2))
 			.hasSize(1)
 			.containsOnly("2");
 	}
 
 	@Test
-	public void testIntersectionListsWithCommonDuplications() {
+	public void intersectionListsWithCommonDuplications() {
 		List<String> intersectionList = MyListUtils.intersection(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2);
 		assertThat(intersectionList)
 			.hasSize(6)
@@ -131,38 +131,38 @@ public class MyListUtilsTest {
 	}
 
 	@Test
-	public void testDifferenceSameList() {
+	public void differenceWithSameList() {
 		assertThat(MyListUtils.difference(LIST_1, LIST_1)).isEmpty();
 	}
 
 	@Test
-	public void testDifferenceDifferentLists() {
+	public void differenceWithDifferentLists() {
 		assertThat(MyListUtils.difference(LIST_1, LIST_2))
 			.hasSize(3)
 			.isEqualTo(LIST_1);
 	}
 
 	@Test
-	public void testDifferenceListsWithCommonDuplications() {
+	public void differenceListsWithCommonDuplications() {
 		assertThat(MyListUtils.difference(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2))
 			.hasSize(2)
 			.containsOnlyOnce("3", "5");
 	}
 
 	@Test
-	public void testDisjunctionWithSameList() {
+	public void disjunctionWithSameList() {
 		assertThat(MyListUtils.disjunction(LIST_1, LIST_1)).isEmpty();
 	}
 
 	@Test
-	public void testDisjunctionWithDifferentLists() {
+	public void disjunctionWithDifferentLists() {
 		assertThat(MyListUtils.disjunction(LIST_1, LIST_2))
 			.hasSize(6)
 			.containsOnlyOnce("1", "2", "3", "4", "5", "6");
 	}
 
 	@Test
-	public void testDisjunctionListsWithDuplications() {
+	public void disjunctionListsWithDuplications() {
 		List<String> disjunctionList = MyListUtils.disjunction(LIST_DUPLICATIONS_1, LIST_DUPLICATIONS_2);
 		assertThat(disjunctionList)
 			.hasSize(8)
@@ -175,7 +175,7 @@ public class MyListUtilsTest {
 	}
 
 	@Test
-	public void testDisjunctionListsWithCommonDuplications() {
+	public void disjunctionListsWithCommonDuplications() {
 		assertThat(MyListUtils.disjunction(LIST_COMMON_DUPLICATIONS_1, LIST_COMMON_DUPLICATIONS_2))
 			.hasSize(3)
 			.containsOnlyOnce("2", "3", "5");
