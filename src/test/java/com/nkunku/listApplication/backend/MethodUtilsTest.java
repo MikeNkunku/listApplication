@@ -15,17 +15,17 @@ import org.junit.Test;
 public class MethodUtilsTest {
 
 	@Test
-	public void testGetMeanElapsedTimeOnce() throws Exception {
+	public void getMeanElapsedTimeOnce() throws Exception {
 		testGetMeanElapsedTime(-1);
 	}
 
 	@Test
-	public void testGetMeanElapsedTimeTenTimes() throws Exception {
+	public void getMeanElapsedTimeTenTimes() throws Exception {
 		testGetMeanElapsedTime(10);
 	}
 
 	@Test
-	public void testGetMillisecondsFromNanoseconds() {
+	public void getMillisecondsFromNanoseconds() {
 		assertThat(MethodUtils.getMillisecondsFromNanoseconds(900_000L)).isEqualTo(1);
 		assertThat(MethodUtils.getMillisecondsFromNanoseconds(1_130_300L)).isEqualTo(1);
 		assertThat(MethodUtils.getMillisecondsFromNanoseconds(1_499_999L)).isEqualTo(1);
