@@ -21,6 +21,12 @@ public final class MyListUtils {
 
 
 	/**
+	 * Cannot be instantiated.
+	 */
+	private MyListUtils() {}
+
+
+	/**
 	 * @param   pList1 The first list.
 	 * @param   pList2 The second list.
 	 * @return  The union of the lists.

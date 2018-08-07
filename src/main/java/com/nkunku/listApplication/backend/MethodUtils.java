@@ -2,6 +2,7 @@ package com.nkunku.listApplication.backend;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -11,25 +12,33 @@ import java.util.List;
 public final class MethodUtils {
 
 	/**
+	 * Cannot be instantiated.
+	 */
+	private MethodUtils() {}
+
+
+	/**
 	 * @param   pMethod The method to invoke.
 	 * @param   pNbRuns The number of times that the method must be executed.
-	 * @param   pLists  The arguments to call the method with.
+	 * @param   pList1  The first list.
+	 * @param   pList2  The second list.
+	 *
 	 * @return  The mean elapsed time (in <b>nanoseconds</b>) for the method with the provided arguments.
+	 *
 	 * @throws  IllegalAccessException      When the provided method cannot be accessed.
 	 * @throws  IllegalArgumentException    When the arguments are not of the correct type.
 	 * @throws  InvocationTargetException   When the method cannot be called on the object.
 	 */
-	// FIXME: This method must only take 2 lists instead of an array of lists
-	@SafeVarargs
-	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final List<String>... pLists) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final List<String> pList1, final List<String> pList2) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int nbRuns = pNbRuns < 2 ? 1 : pNbRuns;
 		int runIdx = 0;
-		long startTime;
 		long sumElapsedTimes = 0;
+
+		long startTime;
 		while (runIdx < nbRuns) {
 			startTime = System.nanoTime();
-			pMethod.invoke(null, (Object[]) pLists);
-			sumElapsedTimes += System.nanoTime() - startTime;
+			pMethod.invoke(null, pList1, pList2);
+			sumElapsedTimes = System.nanoTime() - startTime;
 			runIdx++;
 		}
 		return sumElapsedTimes / nbRuns;
