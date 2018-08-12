@@ -2,7 +2,6 @@ package com.nkunku.listApplication.backend;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.Duration;
 import java.util.List;
 
 /**
@@ -11,17 +10,16 @@ import java.util.List;
  */
 public final class MethodUtils {
 
-	/**
-	 * Cannot be instantiated.
-	 */
+	/** Cannot be instantiated. */
 	private MethodUtils() {}
 
 
 	/**
-	 * @param   pMethod The method to invoke.
-	 * @param   pNbRuns The number of times that the method must be executed.
-	 * @param   pList1  The first list.
-	 * @param   pList2  The second list.
+	 * @param pMethod	The method to invoke.
+	 * @param pNbRuns	The number of times that the method must be executed.
+	 * @param pInstance	The instance to call the provided method on.
+	 * @param pList1	The first list.
+	 * @param pList2	The second list.
 	 *
 	 * @return  The mean elapsed time (in <b>nanoseconds</b>) for the method with the provided arguments.
 	 *
@@ -29,7 +27,7 @@ public final class MethodUtils {
 	 * @throws  IllegalArgumentException    When the arguments are not of the correct type.
 	 * @throws  InvocationTargetException   When the method cannot be called on the object.
 	 */
-	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final List<String> pList1, final List<String> pList2) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final Object pInstance, final List<String> pList1, final List<String> pList2) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		int nbRuns = pNbRuns < 2 ? 1 : pNbRuns;
 		int runIdx = 0;
 		long sumElapsedTimes = 0;
@@ -37,7 +35,7 @@ public final class MethodUtils {
 		long startTime;
 		while (runIdx < nbRuns) {
 			startTime = System.nanoTime();
-			pMethod.invoke(null, pList1, pList2);
+			pMethod.invoke(pInstance, pList1, pList2);
 			sumElapsedTimes = System.nanoTime() - startTime;
 			runIdx++;
 		}
