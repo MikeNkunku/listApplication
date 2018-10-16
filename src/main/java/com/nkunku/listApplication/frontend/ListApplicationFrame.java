@@ -9,6 +9,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +28,11 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.nkunku.listApplication.backend.MethodUtils;
 import com.nkunku.listApplication.backend.MyListUtils;
 import com.nkunku.listApplication.backend.MyListUtilsOperation;
 import com.nkunku.listApplication.ListApplication;
@@ -40,34 +44,22 @@ import com.nkunku.listApplication.ListApplicationException;
  */
 public class ListApplicationFrame extends JFrame {
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Constants
-	// --------------------------------------------------------------------------------------------------------------------------------
-
 	/** The serial version UID. */
 	private static final long serialVersionUID = -2071241925464497755L;
-
 	/** User field : <b>DELIMITER</b>. */
 	public static final String DELIMITER_FIELD = "delimiterField";
-
 	/** User field : <b>NUMBER OF RUNS</b>. */
 	public static final String NB_RUNS_FIELD = "nbRunsField";
-
 	/** User field : <b>FIRST LIST</b>. */
 	public static final String FIRST_LIST_FIELD = "1stListField";
-
 	/** User field : <b>SECOND LIST</b>. */
 	public static final String SECOND_LIST_FIELD = "2ndListField";
-
 	/** User field : <b>LIST OPERATION</b>. */
 	public static final String LIST_OPERATION_FIELD = "listOperationField";
-
 	/** Array of user fields. */
 	protected static final String[] USER_TEXT_FIELDS = new String[] {DELIMITER_FIELD, NB_RUNS_FIELD, FIRST_LIST_FIELD, SECOND_LIST_FIELD};
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Fields
-	// --------------------------------------------------------------------------------------------------------------------------------
+
 	/** The singleton instance. */
 	private static final ListApplicationFrame fInstance = new ListApplicationFrame();
 
@@ -81,13 +73,9 @@ public class ListApplicationFrame extends JFrame {
 		fConstraints.fill = GridBagConstraints.HORIZONTAL;
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Methods
-	// --------------------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds the provided component to the instance's content pane with the given key.
-	 * @param pKey The key to find the component later.
 	 * @param pComponent The component to add.
 	 */
 	private static void addComponent(final JComponent pComponent) {
@@ -222,12 +210,7 @@ public class ListApplicationFrame extends JFrame {
 		runButton.setName("runButton");
 		runButton.setEnabled(true);
 		runButton.setToolTipText("Run the picked list operation for the provided list.");
-		runButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(final ActionEvent pEvt) {
-				executeListOperation();
-			}
-		});
+		runButton.addActionListener((pEvent) -> executeListOperation());
 		addComponent(runButton);
 	}
 
@@ -248,9 +231,6 @@ public class ListApplicationFrame extends JFrame {
 		addComponent(resultsArea);
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-	// Getters
-	// --------------------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * @param pKey The component key.
@@ -280,8 +260,8 @@ public class ListApplicationFrame extends JFrame {
 	 * @return The number of times to run the list operation.
 	 * @throws ListApplicationException When an error occurs while parsing the value.
 	 */
-	private static long getNbRuns() throws ListApplicationException {
-		long nbRuns;
+	private static int getNbRuns() throws ListApplicationException {
+		int nbRuns;
 		try {
 			nbRuns = Integer.valueOf(getUserValue(NB_RUNS_FIELD));
 		} catch (NumberFormatException e) {
@@ -297,23 +277,30 @@ public class ListApplicationFrame extends JFrame {
 		try {
 			long myListUtilsMeanRunTime = 0;
 			long collectionUtilsMeanRunTime = 0;
-			long nbRuns = getNbRuns();
+			int nbRuns = getNbRuns();
 			String delimiter = getUserValue(DELIMITER_FIELD);
 			List<String> list1 = MyListUtils.getListFromString(getUserValue(FIRST_LIST_FIELD), delimiter);
 			List<String> list2 = MyListUtils.getListFromString(getUserValue(SECOND_LIST_FIELD), delimiter);
 			String listOperation = getUserValue(LIST_OPERATION_FIELD);
-			StringBuilder sb =  new StringBuilder("Delimiter : \"%s\"")
-					.append("\nNb. runs : %d")
-					.append("\nList #1 : \"%s\"")
-					.append("\nList #2 : \"%s\"")
-					.append("\nList operation : \"%s\"");
-			String msg = String.format(sb.toString(), StringUtils.defaultIfBlank(delimiter, MyListUtils.DEFAULT_DELIMITER),
-					Long.valueOf(nbRuns), list1, list2, listOperation);
+			String msgBase =  "Delimiter : \"%s\""
+					+ "\nNb. runs : %d"
+					+ "\nList #1 : \"%s\""
+					+ "\nList #2 : \"%s\""
+					+ "\nList operation : \"%s\""
+					+ "\nExecution time for MyListUtils : \"%d ms\""
+					+ "\nExecution time for CollectionUtils : \"%d ms\"";
+			MyListUtilsOperation operation = MyListUtilsOperation.valueOf(listOperation);
+			long myListUtilsET = MethodUtils.getMeanElapsedTime(operation.getClass().getDeclaredMethod("execute", List.class, List.class), nbRuns, operation, list1, list2);
+			long collectionUtilsET = MethodUtils.getMeanElapsedTime(CollectionUtils.class.getDeclaredMethod(operation.name().toLowerCase(), Collection.class, Collection.class), nbRuns, null, list1, list2);
+			String msg = String.format(msgBase, StringUtils.defaultIfBlank(delimiter, MyListUtils.DEFAULT_DELIMITER),
+					nbRuns, list1, list2, listOperation, myListUtilsET, collectionUtilsET);
 			setResults(msg);
-		} catch (ListApplicationException e) {
-			displayDialog(e.getMessage(), "Error", e.getLevel());
+		} catch (Exception e) {
+			displayDialog(e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//			displayDialog(e.getMessage(), "Error", e.getLevel());
 		}
 	}
+
 
 	/**
 	 * Set the results to display.

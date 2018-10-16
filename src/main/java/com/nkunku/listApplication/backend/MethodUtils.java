@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Class containing methods which are likely to be used by other classes.
+ *
  * @author Mike.
  */
 public final class MethodUtils {
@@ -15,11 +16,11 @@ public final class MethodUtils {
 
 
 	/**
-	 * @param pMethod	The method to invoke.
-	 * @param pNbRuns	The number of times that the method must be executed.
-	 * @param pInstance	The instance to call the provided method on.
-	 * @param pList1	The first list.
-	 * @param pList2	The second list.
+	 * @param method	The method to invoke.
+	 * @param nbRuns	The number of times that the method must be executed.
+	 * @param instance	The instance to call the provided method on.
+	 * @param list1	The first list.
+	 * @param list2	The second list.
 	 *
 	 * @return  The mean elapsed time (in <b>nanoseconds</b>) for the method with the provided arguments.
 	 *
@@ -27,15 +28,15 @@ public final class MethodUtils {
 	 * @throws  IllegalArgumentException    When the arguments are not of the correct type.
 	 * @throws  InvocationTargetException   When the method cannot be called on the object.
 	 */
-	public static long getMeanElapsedTime(final Method pMethod, final int pNbRuns, final Object pInstance, final List<String> pList1, final List<String> pList2) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
-		int nbRuns = pNbRuns < 2 ? 1 : pNbRuns;
+	public static long getMeanElapsedTime(final Method method, final int nbRuns, final Object instance, final List<String> list1, final List<String> list2) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		int validNbRuns = nbRuns < 2 ? 1 : nbRuns;
 		int runIdx = 0;
 		long sumElapsedTimes = 0;
 
 		long startTime;
-		while (runIdx < nbRuns) {
+		while (runIdx < validNbRuns) {
 			startTime = System.nanoTime();
-			pMethod.invoke(pInstance, pList1, pList2);
+			method.invoke(instance, list1, list2);
 			sumElapsedTimes = System.nanoTime() - startTime;
 			runIdx++;
 		}
@@ -43,10 +44,10 @@ public final class MethodUtils {
 	}
 
 	/**
-	* @param   pTimeInNanoSeconds The time in <b>nanoseconds</b>.
+	* @param   timeInNanoSeconds The time in <b>nanoseconds</b>.
 	* @return  The time in <b>milliseconds</b>.
 	*/
-	public static long getMillisecondsFromNanoseconds(final long pTimeInNanoSeconds) {
-		return Math.round((pTimeInNanoSeconds / Math.pow(10, 6)));
+	public static long getMillisecondsFromNanoseconds(final long timeInNanoSeconds) {
+		return Math.round((timeInNanoSeconds / Math.pow(10, 6)));
 	}
 }

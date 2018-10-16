@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 
 /**
  * Enumeration class to apply the available operations of {@link MyListUtils}.
+ *
  * @author Mike.
  */
 public enum MyListUtilsOperation {
@@ -26,22 +27,23 @@ public enum MyListUtilsOperation {
 
 	/**
 	 * Private constructor.
-	 * @param pMethod		The list operation to execute.
-	 * @param pEquivalent	The name of the equivalent method in CollectionUtils.
+	 *
+	 * @param method     The list operation to execute.
+	 * @param equivalent The name of the equivalent method in CollectionUtils.
 	 */
-	MyListUtilsOperation(final BiFunction<List<String>, List<String>, List<String>> pMethod, final String pEquivalent) {
-		method = pMethod;
-		equivalent = pEquivalent;
+	MyListUtilsOperation(final BiFunction<List<String>, List<String>, List<String>> method, final String equivalent) {
+		this.method = method;
+		this.equivalent = equivalent;
 	}
 
 
 	/**
-	 * @param pList1 The first list provided.
-	 * @param pList2 The second list provided.
+	 * @param list1 The first list provided.
+	 * @param list2 The second list provided.
 	 * @return The resulting list.
 	 */
-	public List<String> execute(final List<String> pList1, final List<String> pList2) {
-		return method.apply(pList1, pList2);
+	public List<String> execute(final List<String> list1, final List<String> list2) {
+		return method.apply(list1, list2);
 	}
 
 	/** @return The name of the equivalent method within {@linkplain org.apache.commons.collections.CollectionUtils CollectionUtils}. */

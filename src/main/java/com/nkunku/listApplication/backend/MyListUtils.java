@@ -12,6 +12,7 @@ import com.nkunku.listApplication.ListApplicationException;
 
 /**
  * Project main class.
+ *
  * @author Mike.
  */
 public final class MyListUtils {
@@ -27,17 +28,17 @@ public final class MyListUtils {
 
 
 	/**
-	 * @param   pList1 The first list.
-	 * @param   pList2 The second list.
+	 * @param   list1 The first list.
+	 * @param   list2 The second list.
 	 * @return  The union of the lists.
 	 */
-	public static List<String> union(final List<String> pList1, final List<String> pList2) {
-		List<String> output = new ArrayList<>(pList1);
+	public static List<String> union(final List<String> list1, final List<String> list2) {
+		List<String> output = new ArrayList<>(list1);
 		int counter = 0;
 		String str;
-		while (counter < pList2.size()) {
-			str = pList2.get(counter);
-			if (!pList1.contains(str) || isMoreThanOnceInList(pList2, counter, str)) {
+		while (counter < list2.size()) {
+			str = list2.get(counter);
+			if (!list1.contains(str) || isMoreThanOnceInList(list2, counter, str)) {
 				output.add(str);
 			}
 			counter++;
