@@ -1,4 +1,2 @@
-/**
- * Main package.
- */
+/** Main package. */
 package com.nkunku.listApplication;
