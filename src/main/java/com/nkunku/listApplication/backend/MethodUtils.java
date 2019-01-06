@@ -40,7 +40,7 @@ public final class MethodUtils {
 			sumElapsedTimes = System.nanoTime() - startTime;
 			runIdx++;
 		}
-		return sumElapsedTimes / nbRuns;
+		return sumElapsedTimes / validNbRuns;
 	}
 
 	/**
