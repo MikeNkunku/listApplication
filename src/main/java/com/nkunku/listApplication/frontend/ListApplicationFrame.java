@@ -37,6 +37,7 @@ import com.nkunku.listApplication.ListApplicationException;
 
 /**
  * The main frame for the application.
+ *
  * @author Mike.
  */
 public class ListApplicationFrame extends JFrame {
@@ -70,7 +71,7 @@ public class ListApplicationFrame extends JFrame {
 	private static final GridBagConstraints constraints = new GridBagConstraints();
 
 	/** The map containing the components. */
-	private static final Map<String, JComponent> components = new HashMap<String, JComponent>();
+	private static final Map<String, JComponent> components = new HashMap<>();
 
 	static {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -117,11 +118,10 @@ public class ListApplicationFrame extends JFrame {
 	/**
 	 * Displays the provided message in a dialog window with the given title and level.
 	 * @param pMessage The message.
-	 * @param pDialogTitle The title.
 	 * @param pLevel The level (info, warning, error).
 	 */
-	public static void displayDialog(final String pMessage, final String pDialogTitle, final int pLevel) {
-		JOptionPane.showMessageDialog(instance.getContentPane(), pMessage, pDialogTitle, pLevel);
+	private static void displayDialog(final String pMessage, final int pLevel) {
+		JOptionPane.showMessageDialog(instance.getContentPane(), pMessage, "Error", pLevel);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class ListApplicationFrame extends JFrame {
 		constraints.gridy++;
 		addComponent(secondListField);
 
-		JList<MyListUtilsOperation> listOperations = new JList<MyListUtilsOperation>(MyListUtilsOperation.values());
+		JList<MyListUtilsOperation> listOperations = new JList<>(MyListUtilsOperation.values());
 		listOperations.setLayoutOrientation(JList.VERTICAL);
 		listOperations.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listOperations.setVisibleRowCount(2);
@@ -242,7 +242,7 @@ public class ListApplicationFrame extends JFrame {
 	 * @return The component if found.<br/>
 	 * <code>null</code> otherwise.
 	 */
-	private static final JComponent getComponent(final String pKey) {
+	private static JComponent getComponent(final String pKey) {
 		return components.get(pKey);
 	}
 
@@ -252,7 +252,7 @@ public class ListApplicationFrame extends JFrame {
 	 * @throws ListApplicationException When the field does not exist.
 	 */
 	@SuppressWarnings("unchecked")
-	private static final String getUserValue(final String pFieldName) throws ListApplicationException {
+	private static String getUserValue(final String pFieldName) throws ListApplicationException {
 		if (ArrayUtils.contains(USER_TEXT_FIELDS, pFieldName)) {
 			return ((JTextField) getComponent(pFieldName)).getText();
 		} else if (LIST_OPERATION_FIELD.equals(pFieldName)) {
@@ -280,8 +280,6 @@ public class ListApplicationFrame extends JFrame {
 	 */
 	private static void executeListOperation() {
 		try {
-			long myListUtilsMeanRunTime = 0;
-			long collectionUtilsMeanRunTime = 0;
 			int nbRuns = getNbRuns();
 			String delimiter = getUserValue(DELIMITER_FIELD);
 			List<String> list1 = MyListUtils.getListFromString(getUserValue(FIRST_LIST_FIELD), delimiter);
@@ -301,14 +299,15 @@ public class ListApplicationFrame extends JFrame {
 					nbRuns, list1, list2, listOperation, myListUtilsET, collectionUtilsET);
 			setResults(msg);
 		} catch (Exception e) {
-			displayDialog(e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//			displayDialog(e.getMessage(), "Error", e.getLevel());
+			int errorLevel = e instanceof ListApplicationException ? ((ListApplicationException) e).getLevel() : JOptionPane.ERROR_MESSAGE;
+			displayDialog(e.getMessage(), errorLevel);
 		}
 	}
 
 
 	/**
-	 * Set the results to display.
+	 * Sets the results to display.
+	 *
 	 * @param pString The message to display.
 	 */
 	private static void setResults(final String pString) {

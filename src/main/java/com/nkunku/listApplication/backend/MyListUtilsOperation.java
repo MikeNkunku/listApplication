@@ -28,12 +28,12 @@ public enum MyListUtilsOperation {
 	/**
 	 * Private constructor.
 	 *
-	 * @param method     The list operation to execute.
-	 * @param equivalent The name of the equivalent method in CollectionUtils.
+	 * @param pMethod     The list operation to execute.
+	 * @param pEquivalent The name of the equivalent method in CollectionUtils.
 	 */
-	MyListUtilsOperation(final BiFunction<List<String>, List<String>, List<String>> method, final String equivalent) {
-		this.method = method;
-		this.equivalent = equivalent;
+	MyListUtilsOperation(final BiFunction<List<String>, List<String>, List<String>> pMethod, final String pEquivalent) {
+		this.method = pMethod;
+		this.equivalent = pEquivalent;
 	}
 
 
@@ -43,11 +43,11 @@ public enum MyListUtilsOperation {
 	 * @return The resulting list.
 	 */
 	public List<String> execute(final List<String> list1, final List<String> list2) {
-		return method.apply(list1, list2);
+		return this.method.apply(list1, list2);
 	}
 
 	/** @return The name of the equivalent method within {@linkplain org.apache.commons.collections.CollectionUtils CollectionUtils}. */
 	public String equivalent() {
-		return equivalent;
+		return this.equivalent;
 	}
 }

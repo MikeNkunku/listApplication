@@ -22,16 +22,16 @@ import org.junit.runners.Parameterized;
 public class MethodUtilsTest {
 
 	/** Default list. */
-	private static List<String> LIST = Arrays.asList("1", "2");
+	private static final List<String> LIST = Arrays.asList("1", "2");
 
 
 	@RunWith(Parameterized.class)
 	public static class ParameterizedPart {
 
 		/** The method to execute. */
-		private Method fMethod;
+		private final Method fMethod;
 		/** The instance to execute the method on. */
-		private Object fInstance;
+		private final Object fInstance;
 
 		public ParameterizedPart(final Method pMethod, final Object pInstance) {
 			fMethod = pMethod;

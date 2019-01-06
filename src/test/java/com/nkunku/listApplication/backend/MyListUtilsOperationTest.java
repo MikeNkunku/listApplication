@@ -7,7 +7,6 @@ import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -29,9 +28,9 @@ public class MyListUtilsOperationTest {
 	public static class EquivalentTest {
 
 		/** {@link MyListUtilsOperation} instance. */
-		private MyListUtilsOperation fInstance;
+		private final MyListUtilsOperation fInstance;
 		/** The expected equivalent for the instance. */
-		private String fExpectedEquivalent;
+		private final String fExpectedEquivalent;
 
 		public EquivalentTest(final MyListUtilsOperation pInstance, final String pExpectedEquivalent) {
 			fInstance = pInstance;
