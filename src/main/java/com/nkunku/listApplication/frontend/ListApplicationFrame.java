@@ -6,10 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -46,31 +43,37 @@ public class ListApplicationFrame extends JFrame {
 
 	/** The serial version UID. */
 	private static final long serialVersionUID = -2071241925464497755L;
+
+
+	/** Cannot be instantiated. */
+	private ListApplicationFrame() { }
+
+
 	/** User field : <b>DELIMITER</b>. */
-	public static final String DELIMITER_FIELD = "delimiterField";
+	private static final String DELIMITER_FIELD = "delimiterField";
 	/** User field : <b>NUMBER OF RUNS</b>. */
-	public static final String NB_RUNS_FIELD = "nbRunsField";
+	private static final String NB_RUNS_FIELD = "nbRunsField";
 	/** User field : <b>FIRST LIST</b>. */
-	public static final String FIRST_LIST_FIELD = "1stListField";
+	private static final String FIRST_LIST_FIELD = "1stListField";
 	/** User field : <b>SECOND LIST</b>. */
-	public static final String SECOND_LIST_FIELD = "2ndListField";
+	private static final String SECOND_LIST_FIELD = "2ndListField";
 	/** User field : <b>LIST OPERATION</b>. */
-	public static final String LIST_OPERATION_FIELD = "listOperationField";
+	private static final String LIST_OPERATION_FIELD = "listOperationField";
 	/** Array of user fields. */
-	protected static final String[] USER_TEXT_FIELDS = new String[] {DELIMITER_FIELD, NB_RUNS_FIELD, FIRST_LIST_FIELD, SECOND_LIST_FIELD};
+	private static final String[] USER_TEXT_FIELDS = new String[] {DELIMITER_FIELD, NB_RUNS_FIELD, FIRST_LIST_FIELD, SECOND_LIST_FIELD};
 
 
 	/** The singleton instance. */
-	private static final ListApplicationFrame fInstance = new ListApplicationFrame();
+	private static final ListApplicationFrame instance = new ListApplicationFrame();
 
 	/** The instance constraints. */
-	private static final GridBagConstraints fConstraints = new GridBagConstraints();
+	private static final GridBagConstraints constraints = new GridBagConstraints();
 
 	/** The map containing the components. */
-	private static final Map<String, JComponent> fComponents = new HashMap<String, JComponent>();
+	private static final Map<String, JComponent> components = new HashMap<String, JComponent>();
 
 	static {
-		fConstraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 	}
 
 
@@ -79,34 +82,34 @@ public class ListApplicationFrame extends JFrame {
 	 * @param pComponent The component to add.
 	 */
 	private static void addComponent(final JComponent pComponent) {
-		fComponents.put(pComponent.getName(), pComponent);
-		fInstance.add(pComponent, fConstraints);
+		components.put(pComponent.getName(), pComponent);
+		instance.add(pComponent, constraints);
 	}
 
 	/**
-	 * Set the main frame's configuration when the instance is first initialized.
+	 * Sets the main frame's configuration when the instance is first initialized.
 	 */
 	public static void launch() {
-		fInstance.setTitle(ListApplication.class.getSimpleName());
-		fInstance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Default operation when the frame is closed.
-		fInstance.setLayout(new GridBagLayout());
-		fInstance.createRootPane();
-		fInstance.setMaximumSize(new Dimension(400, 500));
+		instance.setTitle(ListApplication.class.getSimpleName());
+		instance.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Default operation when the frame is closed.
+		instance.setLayout(new GridBagLayout());
+		instance.createRootPane();
+		instance.setMaximumSize(new Dimension(400, 500));
 
 		addLabelPanel();
 		addFieldPanel();
 		addRunPanel();
 		addResultsPanel();
 
-		fInstance.pack(); // Sizes the frame so that all its contents are displayed at their preferred size or above.
+		instance.pack(); // Sizes the frame so that all its contents are displayed at their preferred size or above.
 
 		// Set the bounds.
 
 		// Centers the frame.
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		fInstance.setLocation((d.width - fInstance.getSize().width) / 2, (d.height - fInstance.getSize().height) / 2);
+		instance.setLocation((d.width - instance.getSize().width) / 2, (d.height - instance.getSize().height) / 2);
 
-		fInstance.setVisible(true);
+		instance.setVisible(true);
 	}
 
 	/**
@@ -116,72 +119,72 @@ public class ListApplicationFrame extends JFrame {
 	 * @param pLevel The level (info, warning, error).
 	 */
 	public static void displayDialog(final String pMessage, final String pDialogTitle, final int pLevel) {
-		JOptionPane.showMessageDialog(fInstance.getContentPane(), pMessage, pDialogTitle, pLevel);
+		JOptionPane.showMessageDialog(instance.getContentPane(), pMessage, pDialogTitle, pLevel);
 	}
 
 	/**
 	 * Adds the label panel.
 	 */
 	private static void addLabelPanel() {
-		fConstraints.gridx = fConstraints.gridy = 0;
-		fConstraints.insets = new Insets(5, 10, 5, 10);
+		constraints.gridx = constraints.gridy = 0;
+		constraints.insets = new Insets(5, 10, 5, 10);
 
 		JLabel delimiterLabel = new JLabel("Delimiter");
 		delimiterLabel.setToolTipText("Delimiter to use for the lists.\nIf none is provided, the default one will be used instead.");
-		fInstance.add(delimiterLabel, fConstraints);
+		instance.add(delimiterLabel, constraints);
 
 		JLabel nbRunsLabel = new JLabel("Nb. runs");
 		nbRunsLabel.setToolTipText("The number of times that the operation should be run to have a meaningful result.");
-		fConstraints.gridy++;
-		fInstance.add(nbRunsLabel, fConstraints);
+		constraints.gridy++;
+		instance.add(nbRunsLabel, constraints);
 
 		JLabel firstListLabel = new JLabel("First list");
-		fConstraints.gridy++;
-		fInstance.add(firstListLabel, fConstraints);
+		constraints.gridy++;
+		instance.add(firstListLabel, constraints);
 
 		JLabel secondListLabel = new JLabel("Second list");
-		fConstraints.gridy++;
-		fInstance.add(secondListLabel, fConstraints);
+		constraints.gridy++;
+		instance.add(secondListLabel, constraints);
 
 		JLabel listOperationLabel = new JLabel("List operation");
-		fConstraints.gridy++;
-		fInstance.add(listOperationLabel, fConstraints);
+		constraints.gridy++;
+		instance.add(listOperationLabel, constraints);
 	}
 
 	/**
 	 * Adds the panel containing all the fields to be filled by the user.
 	 */
 	private static void addFieldPanel() {
-		fConstraints.gridx = 1;
-		fConstraints.insets = new Insets(5, 10, 5, 10);
+		constraints.gridx = 1;
+		constraints.insets = new Insets(5, 10, 5, 10);
 
 		Border border = BorderFactory.createEmptyBorder(0, 5, 0, 10);
 		JTextField delimiterField = new JTextField();
 		delimiterField.setEditable(true);
 		delimiterField.setName(DELIMITER_FIELD);
 		delimiterField.setBorder(border);
-		fConstraints.gridy = 0;
+		constraints.gridy = 0;
 		addComponent(delimiterField);
 
 		JTextField nbRunsField = new JTextField();
 		nbRunsField.setName(NB_RUNS_FIELD);
 		nbRunsField.setEditable(true);
 		nbRunsField.setBorder(border);
-		fConstraints.gridy++;
+		constraints.gridy++;
 		addComponent(nbRunsField);
 
 		JTextField firstListField = new JTextField();
 		firstListField.setName(FIRST_LIST_FIELD);
 		firstListField.setEditable(true);
 		firstListField.setBorder(border);
-		fConstraints.gridy++;
+		constraints.gridy++;
 		addComponent(firstListField);
 
 		JTextField secondListField = new JTextField();
 		secondListField.setName(SECOND_LIST_FIELD);
 		secondListField.setEditable(true);
 		secondListField.setBorder(border);
-		fConstraints.gridy++;
+		constraints.gridy++;
 		addComponent(secondListField);
 
 		JList<MyListUtilsOperation> listOperations = new JList<MyListUtilsOperation>(MyListUtilsOperation.values());
@@ -190,9 +193,9 @@ public class ListApplicationFrame extends JFrame {
 		listOperations.setVisibleRowCount(2);
 		listOperations.setName(LIST_OPERATION_FIELD);
 		JScrollPane listOperationsScroller = new JScrollPane(listOperations);
-		fConstraints.gridy++;
-		fComponents.put(LIST_OPERATION_FIELD, listOperations);
-		fInstance.add(listOperationsScroller, fConstraints);
+		constraints.gridy++;
+		components.put(LIST_OPERATION_FIELD, listOperations);
+		instance.add(listOperationsScroller, constraints);
 
 		delimiterField.requestFocusInWindow();
 	}
@@ -201,10 +204,10 @@ public class ListApplicationFrame extends JFrame {
 	 * Adds the run panel (only containing the button to run the picked list operation). 
 	 */
 	private static void addRunPanel() {
-		fConstraints.gridy = 5;
-		fConstraints.gridx = 0;
-		fConstraints.gridwidth = 2;
-		fConstraints.insets = new Insets(5, 10, 5, 10);
+		constraints.gridy = 5;
+		constraints.gridx = 0;
+		constraints.gridwidth = 2;
+		constraints.insets = new Insets(5, 10, 5, 10);
 
 		JButton runButton = new JButton("Run");
 		runButton.setName("runButton");
@@ -218,10 +221,10 @@ public class ListApplicationFrame extends JFrame {
 	 * Adds the the non-editable text area which displays the results.
 	 */
 	private static void addResultsPanel() {
-		fConstraints.gridy = 6;
-		fConstraints.gridx = 0;
-		fConstraints.gridwidth = 2;
-		fConstraints.insets =  new Insets(5, 10, 5, 10);
+		constraints.gridy = 6;
+		constraints.gridx = 0;
+		constraints.gridwidth = 2;
+		constraints.insets =  new Insets(5, 10, 5, 10);
 
 		JTextArea resultsArea = new JTextArea(5, 2);
 		resultsArea.setEditable(false);
@@ -238,7 +241,7 @@ public class ListApplicationFrame extends JFrame {
 	 * <code>null</code> otherwise.
 	 */
 	private static final JComponent getComponent(final String pKey) {
-		return fComponents.get(pKey);
+		return components.get(pKey);
 	}
 
 	/**
