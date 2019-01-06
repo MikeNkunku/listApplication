@@ -74,6 +74,8 @@ public class ListApplicationFrame extends JFrame {
 
 	static {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.weightx = .01;
+		constraints.weighty = .01;
 	}
 
 
